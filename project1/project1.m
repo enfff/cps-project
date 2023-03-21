@@ -8,38 +8,50 @@ clc;
 
 format long
 
+miss = 0;
 q = 10; %dimension of y
 lambda = 1e-1;
 p = 20; %dimension of x
-L = lambda*ones(p,1); %vector of lambda
-C = randn(q,p); 
+L = lambda*ones(p,1); %vector of lambda 
 epsilon = 1e-8; %precision (?)
-tau = norm(C,2)^(-2) - epsilon;
 sigma = 1e-2; %standard deviation
 nu = sigma^(2)*randn(q,1);
 delta = 1e-12;
+k=2; %numeber of non-null elements of x
 
-x = 1 + (2-1)*rand(p,1);
-x_0 = zeros(p,1);
+for i=1:20
 
-mask = x>1.8;
-while mask==0
+    C = randn(q,p);
+    tau = norm(C,2)^(-2) - epsilon;
     x = 1 + (2-1)*rand(p,1);
-    mask = x>1.8;
-end
-x = mask.*x;
-y = C*x + nu;
+    x_0 = zeros(p,1);
 
-while 1
-    x_new = IST(x_0+tau*C'*(y-C*x_0),L);
-    if norm(x_new - x_0,2)<delta
-        break;
+    mask = randi([1 p],k,1); %generates k non-null indices
+
+    for i=1:p
+        if ~ismember(mask,i)
+            x(i) = 0;
+        end
     end
-    x_0 = x_new;
+
+    y = C*x + nu;
+    [x_zero_norm, x_indices] = zero_norm(x);
+
+    while 1
+        x_new = IST(x_0+tau*C'*(y-C*x_0),L);
+        if norm(x_new - x_0,2)<delta
+            break;
+        end
+        x_0 = x_new;
+    end
+    
+    [x0_zero_norm, x0_indices] = zero_norm(x_0);
+    if ~compare(x0_indices,x_indices)
+        miss = miss+1;
+        %[x_indices x0_indices]
+    end
 end
 
-x_new
-x
-norm(x-x_new,2)
-
+disp("Number of misses: "+miss);
+disp("Total number of elements in x: "+p);
 
