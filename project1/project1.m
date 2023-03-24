@@ -16,7 +16,7 @@ mins = [];
 Q = 10:50;
 for q=Q
     miss = 0;
-    outer_iterations = 20;
+    outer_iterations = 1000;
     iterations = zeros(outer_iterations,1);
     lambda = 1e-1;
     p = 20; %dimension of x
@@ -53,7 +53,8 @@ for q=Q
             end
             x_0 = x_new;
         end
-    
+        
+        prune_array(x_0,lambda);
         [x0_zero_norm, x0_indices] = zero_norm(x_0);
         if ~compare(x0_indices,x_indices)
             miss = miss+1;
@@ -77,9 +78,9 @@ end
 figure(1)
 hold on
 xlabel("Dimension of y");
-ylabel("Number of misevaluation");
-title("Number of misevaluation in function of the dimension q of y");
-plot(Q,misses,"ko-");
+ylabel("Percentage of Correct Evaluations");
+title("Number of correct evaluations in function of the dimension q of y");
+plot(Q,(outer_iterations-misses)/(outer_iterations)*100,"ko-");
 grid;
 hold off
 
