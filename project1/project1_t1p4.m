@@ -2,9 +2,9 @@ close all;
 clear all;
 clc;
 
-%%%%%%%%
-%Task 1%
-%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+% Task 1 point 4 %
+%%%%%%%%%%%%%%%%%%
 
 format long
 
@@ -13,23 +13,30 @@ means = [];
 maxes = [];
 mins = [];
 
-Q = 10:50;
-for q=Q
+tau=[];
+p = 20; %dimension of x
+q= 50; %dimension of y 
+C = randn(q,p);
+
+for t=1:30 
     miss = 0;
     outer_iterations = 20;
     iterations = zeros(outer_iterations,1);
+
+    if t==1
+        tau(t) = norm(C,2)^(-2) - 1e-8;  
+    else                    
+        tau(t) = tau(t-1) - 1e-4;   % if 1e-3 or greater IST does not converge
+    end
+ 
     lambda = 1e-1;
-    p = 20; %dimension of x
-    L = lambda*ones(p,1); %vector of lambda 
-    epsilon = 1e-8; %precision (?)
+    L = lambda*ones(p,1); 
     sigma = 1e-2; %standard deviation
     nu = sigma*randn(q,1);
     delta = 1e-12;
     k=2; %numeber of non-null elements of x
 
     for i=1:outer_iterations
-        C = randn(q,p);
-        tau = norm(C,2)^(-2) - epsilon;
         
         x = 1 + (2-1)*rand(p,1);
         x_0 = zeros(p,1);
@@ -47,7 +54,7 @@ for q=Q
 
         while 1
             iterations(i)=iterations(i)+1;
-            x_new = IST(x_0+tau*C'*(y-C*x_0),L);
+            x_new = IST(x_0+tau(t)*C'*(y-C*x_0),L);
             if norm(x_new - x_0,2)<delta
                 break;
             end
@@ -74,39 +81,33 @@ for q=Q
 
 end
 
+
 figure(1)
-hold on
-xlabel("Dimension of y");
-ylabel("Number of misevaluation");
-title("Number of misevaluation in function of the dimension q of y");
-plot(Q,misses,"ko-");
+subplot(2,2,1);
+plot(tau,misses,"ko-");
+xlabel("tau");
+ylabel("Number of misevaluations");
+title("Number of misevaluations in function of tau");
 grid;
-hold off
 
-figure(2)
-hold on
-xlabel("Dimension of y");
+subplot(2,2,2)
+plot(tau,means,"ro-");
+xlabel("tau");
 ylabel("Mean Convergence time");
-title("Mean convergence time in function of the dimension q of y");
-plot(Q,means,"ro-");
+title("Mean convergence time in function of tau");
 grid;
-hold off
 
-figure(3)
-hold on
-xlabel("Dimension of y");
+subplot(2,2,3)
+plot(tau,maxes,"bo-");
+xlabel("tau");
 ylabel("Maximum Convergence time");
-title("Maximum convergence time in function of the dimension q of y");
-plot(Q,maxes,"bo-");
+title("Maximum convergence time in function of tau");
 grid;
-hold off
 
-figure(4)
-hold on
-xlabel("Dimension of y");
+subplot(2,2,4)
+plot(tau,mins,"go-");
+xlabel("tau");
 ylabel("Minimum Convergence time");
-title("Minimum convergence time in function of the dimension q of y");
-plot(Q,mins,"go-");
+title("Minimum convergence time in function of tau");
 grid;
-hold off
 

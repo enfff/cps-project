@@ -2,9 +2,9 @@ close all;
 clear all;
 clc;
 
-%%%%%%%%
-%Task 1%
-%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+% Task 1 point 5 %
+%%%%%%%%%%%%%%%%%%
 
 format long
 
@@ -13,23 +13,31 @@ means = [];
 maxes = [];
 mins = [];
 
-Q = 10:50;
-for q=Q
+lambda=[];
+p = 20; %dimension of x
+q= 50; %dimension of y 
+C = randn(q,p);
+epsilon = 1e-8; %precision (?)
+tau = norm(C,2)^(-2) - epsilon;
+
+for t=1:30 
     miss = 0;
     outer_iterations = 20;
     iterations = zeros(outer_iterations,1);
-    lambda = 1e-1;
-    p = 20; %dimension of x
-    L = lambda*ones(p,1); %vector of lambda 
-    epsilon = 1e-8; %precision (?)
+
+    if t==1
+        lambda(t) = 1e-1;  
+    else                    
+        lambda(t) = lambda(t-1) + 1e-1;
+    end
+ 
+    L = lambda(t)*ones(p,1); 
     sigma = 1e-2; %standard deviation
     nu = sigma*randn(q,1);
     delta = 1e-12;
     k=2; %numeber of non-null elements of x
 
     for i=1:outer_iterations
-        C = randn(q,p);
-        tau = norm(C,2)^(-2) - epsilon;
         
         x = 1 + (2-1)*rand(p,1);
         x_0 = zeros(p,1);
@@ -74,39 +82,33 @@ for q=Q
 
 end
 
+lambda
+
 figure(1)
-hold on
-xlabel("Dimension of y");
-ylabel("Number of misevaluation");
-title("Number of misevaluation in function of the dimension q of y");
-plot(Q,misses,"ko-");
+subplot(2,2,1);
+plot(lambda,misses,"ko-");
+xlabel("lambda");
+ylabel("Number of misevaluations");
+title("Number of misevaluations in function of lambda");
 grid;
-hold off
 
-figure(2)
-hold on
-xlabel("Dimension of y");
+subplot(2,2,2)
+plot(lambda,means,"ro-");
+xlabel("lambda");
 ylabel("Mean Convergence time");
-title("Mean convergence time in function of the dimension q of y");
-plot(Q,means,"ro-");
+title("Mean convergence time in function of lambda");
 grid;
-hold off
 
-figure(3)
-hold on
-xlabel("Dimension of y");
+subplot(2,2,3)
+plot(lambda,maxes,"bo-");
+xlabel("lambda");
 ylabel("Maximum Convergence time");
-title("Maximum convergence time in function of the dimension q of y");
-plot(Q,maxes,"bo-");
+title("Maximum convergence time in function of lambda");
 grid;
-hold off
 
-figure(4)
-hold on
-xlabel("Dimension of y");
+subplot(2,2,4)
+plot(lambda,mins,"go-");
+xlabel("lambda");
 ylabel("Minimum Convergence time");
-title("Minimum convergence time in function of the dimension q of y");
-plot(Q,mins,"go-");
+title("Minimum convergence time in function of lambda");
 grid;
-hold off
-

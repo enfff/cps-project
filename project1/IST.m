@@ -1,7 +1,6 @@
 function x=IST(x_old,L)
 
     x = x_old;
-    a=20;
     s = size(x_old);
     for i=1:s(1)
         if x_old(i) > L(i)
