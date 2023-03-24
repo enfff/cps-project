@@ -22,7 +22,7 @@ while 1
     x = x_new;
 end
 
-x
+x %non funziona bene perche D non e' normalizzata
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -31,9 +31,9 @@ p = 7;
 delta = 1e-12;
 lambda = 1;
 epsilon = 1e-8;
+D = normalize(D);
 tau = norm(D,2)^(-2) - epsilon;
 L = lambda*tau*ones(p,1);
-D = normalize(D);
 
 x = zeros(p,1);
 
@@ -45,6 +45,6 @@ while 1
     x = x_new;
 end
 
-x
+x %serve prendere il valore massimo
 
 
