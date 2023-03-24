@@ -15,7 +15,7 @@ end
 L=(2*1e-2)* big_lambda;
 miss=0;
 num_iterations=30;
-T=1:num_iterations;
+T=1:1;
 accuracy=[];
 
 for i=T
@@ -34,7 +34,6 @@ for i=T
     
     a(S_a(1))= a_i1;
     a(S_a(2))= a_i2;
-    a
 
     y = C*x + nu + a;   % [C I] [x a]' + nu
     [a_zero_norm, a_indices] = zero_norm(a);
@@ -49,10 +48,10 @@ for i=T
         xtilde_0 = xtilde_new;
     end
    
-    x_found= [eye(n) zeros(n,q)]*xtilde_new
-    a_found= [zeros(q,n) eye(q)]*xtilde_new
+    x_found= [eye(n) zeros(n,q)]*xtilde_new;
+    a_found= [zeros(q,n) eye(q)]*xtilde_new;
 
-    [afound_zero_norm, afound_indices] = zero_norm(a_found)
+    [afound_zero_norm, afound_indices] = zero_norm(a_found);
     if ~compare(a_indices,afound_indices)
         miss = miss+1;
     end
@@ -60,11 +59,4 @@ for i=T
     accuracy(i)= norm(x_found-x,2);
 end
 
-miss
-
-figure()
-plot(T,accuracy,"ko-");
-xlabel("iterations");
-ylabel("accuracy");
-grid;
 
