@@ -8,9 +8,9 @@ h=2;    % #sensor attacks
 sigma = 1e-2; %standard deviation
 delta = 1e-12;
 
-big_lambda= zeros(n+q,1);
+big_lambda= ones(n+q,1);
 for k=1:n
-    big_lambda(k)=1;
+    big_lambda(k)=0;
 end
 L=(2*1e-2)* big_lambda;
 miss=0;
@@ -67,5 +67,6 @@ figure()
 xlabel("iterations");
 ylabel("accuracy");
 plot(T,accuracy,"ko-");
+axis([0 10 0 10])
 grid;
 
