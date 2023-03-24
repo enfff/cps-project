@@ -15,9 +15,8 @@ end
 L=(2*1e-2)* big_lambda;
 miss=0;
 num_iterations=30;
-T=1:30;
+T=1:1;
 accuracy=[];
-miss=0;
 
 for i=T
     a=zeros(q,1);   %attacks vector
@@ -61,11 +60,4 @@ for i=T
     accuracy(i)= norm(x_found-x,2);
 end
 
-miss
-
-figure()
-xlabel("iterations");
-ylabel("accuracy");
-plot(T,accuracy,"ko-");
-grid;
 
