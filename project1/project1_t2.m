@@ -12,10 +12,10 @@ big_lambda= ones(n+q,1);
 for k=1:n
     big_lambda(k)=0;
 end
-L=(2*1e-2)* big_lambda;
+L=(1e-2)* big_lambda;
 miss=0;
-num_iterations=30;
-T=1:30;
+num_iterations=1000;
+T=1:num_iterations;
 accuracy=[];
 miss=0;
 
