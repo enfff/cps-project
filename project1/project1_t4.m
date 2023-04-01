@@ -31,7 +31,9 @@ end
 G= [D eye(q)];
 G=normalize(G);
 
-zhat_0= zeros(p+q,1);
+zhat= zeros(p+q,T);     %start xhat=0
+% zhat(:,1)= [x(:,1); zeros(q,1)];      %start xhat== x real
+
 sigma=0.2; % std dev
 nu= sigma*randn(q,1); %noise
 
@@ -54,22 +56,53 @@ for i=1: p+q
 end
 
 L= tau*lambda;
+miss=zeros(T,1);
 
-% for i=1:T
-%     y= D*x + a + nu;
-%     zhat_middle = IST(zhat(:,i)+tau*G'*(y-G*zhat(:,i)),L);
-%    
-%     zhat_0 = zhat_new;
-% end
-% 
-% x_found= [eye(n) zeros(n,q)]*zhat_new;
-% a_found= [zeros(q,n) eye(q)]*zhat_new
-% 
-% [afound_zero_norm, afound_indices] = zero_norm(a_found);
-% if ~compare(a_indices,afound_indices)
-%     miss = miss+1;
-% end
+for i=1:T
+    zhat_middle = IST(zhat(:,i)+tau*G'*(y(:,i)-G*zhat(:,i)),L);
+    
+    %xhat 
+    zhat(1:p,i+1)= A* zhat_middle(1:p);
+   
+    %ahat 
+    zhat(p+1:p+q,i+1) = zhat_middle(p+1:p+q);
+    
+end
 
-x
-y
+% cleaning xhat and ahat
+for i=1:T
+
+    ind_max= n_greater( zhat(1:p,i), j);
+    for l=1:p
+        if ismember(l,ind_max)
+            zhat(l,i)=1;
+        else
+            zhat(l,i)=0;
+        end
+    end
+
+    ind_max= n_greater( zhat(p+1:p+q,i), h);
+    for l=p+1:p+q
+        if ~ismember(l,ind_max)
+           zhat(l,i)=0;
+        end
+    end
+
+    [x_zero_norm, x_indices] = zero_norm(x(:,i));
+    [xfound_zero_norm, xfound_indices] = zero_norm(zhat(1:p,i));
+    if ~compare(x_indices,xfound_indices)
+         miss(i) = 1;
+    end
+
+end
+
+miss
+
+figure();
+xlabel("iterations");
+ylabel("mismatches");
+plot(1:T,miss)
+
+
+
 
