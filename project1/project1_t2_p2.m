@@ -25,16 +25,13 @@ for i=T
    % nu=0;
     epsilon = 1e-8; %precision (?)
     tau = norm(C,2)^(-2) - epsilon;
-    
-    %set non-zero values of a (case with zero_norm(a)=2 )
-    a_i1= 1+ rand(1);
-    a_i2= -a_i1;
-    
-    a(S_a(1))= a_i1;
-    a(S_a(2))= a_i2;
-    a
+    y = C*x + nu;   % no attack
+
+    a(S_a(1))= 0.5*y(S_a(1));
+    a(S_a(2))= 0.5*y(S_a(2));
 
     y = C*x + nu + a;   % [C I] [x a]' + nu
+
     [~, a_indices] = zero_norm(a);
     w_0 = zeros(n+q,1);    %w= [x a]'
     G=[C eye(q)];
@@ -60,15 +57,14 @@ for i=T
     accuracy(i)= 100 - norm(x_found - x,2);
     % Distance between x_found and x. The lower the better.
     % Sottraggo 100 così l'accuracy è al 100% quando la norma è nulla
-end
+end 
 
 miss
 
-%% 
-% figure()
 plot(T,accuracy,".");
-xlabel("iterations");
+xlabel("iterations");   
 ylabel("accuracy");
 axis padded
+ylim([98, 100])
 grid;
 
