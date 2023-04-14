@@ -29,7 +29,7 @@ for t=1:30
         tau(t) = tau(t-1) - 1e-4;   % if 1e-3 or greater IST does not converge
     end
  
-    lambda = 1e-1;
+    lambda = 1e-2;
     L = lambda*ones(p,1); 
     sigma = 1e-2; %standard deviation
     nu = sigma*randn(q,1);

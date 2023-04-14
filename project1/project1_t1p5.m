@@ -26,7 +26,7 @@ for t=1:30
     iterations = zeros(outer_iterations,1);
 
     if t==1
-        lambda(t) = 1e-1;  
+        lambda(t) = 1e-2;  
     else                    
         lambda(t) = lambda(t-1) + 1e-1;
     end
