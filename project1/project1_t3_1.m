@@ -4,12 +4,9 @@ close all;
 clc;
 
 run task3realdata.m    % Loads D (we don't need it!), and the measurement y
-load('task4data') % Overwrites the dictionary D, and loads the matrix A (unused)
 
 q = 6; % # sensors
 p = 7; % # cells
-
-D = D(1:q, 1:p);
 
 delta = 1e-12;
 lambda = 1e-1;
@@ -30,7 +27,7 @@ while 1
     x = x_new;
 end
 
-x;
+x
 % non funziona bene perche D non è normalizzata
 
 %% We're formulating a LASSO problem to recover how many targets are present

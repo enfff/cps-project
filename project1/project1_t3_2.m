@@ -3,7 +3,7 @@ close all;
 clc;
 
 % Loads data from file
-run realdata.m
+run task3realdata.m
 
 q = 6;
 p = 7;
@@ -32,7 +32,6 @@ end
 
 x = [eye(p) zeros(p,q)]*w %Sbaglia perche D non e' normalizzato
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 q = 6;
 p = 7;
@@ -56,5 +55,4 @@ while 1
 end
 
 x = [eye(p) zeros(p,q)]*w; %serve prendere il valore massimo
-x = x/max(x);
-display(x>0.1)
+x = x

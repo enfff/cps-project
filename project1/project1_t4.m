@@ -9,10 +9,10 @@ j=4; % # target
 p=100;  % # cells
 for i=1:50
     if i==1
-        S_x = randi(p,j,1) % support
+        S_x = randi(p,j,1)   % support
         x(:,i)=zeros(p,1);   % positions of targets TODO: duplicates
-        for i=1:j
-            x(S_x(i))=1;
+        for k=1:j
+            x(S_x(k))=1;
         end
     else
         x(:,i)=A*x(:, i-1);
@@ -22,7 +22,7 @@ end
 q=25; % # sensors
 
 h=2; % # sensors attacks
-S_a= randi(q,h,1) % support
+S_a = randi(q,h,1) % support
 a=zeros(q,1);   % positions of targets TODO: duplicates
 for i=1:h
     a(S_a(i))=30;
@@ -45,7 +45,7 @@ end
 
 epsilon= 1e-8;
 sigma = 1e-2; %standard deviation
-tau= norm(G,2)^-2 - epsilon;
+tau= norm(G,2)^(-2) - epsilon;
 lambda=[];
 for i=1: p+q
     if i<=p
@@ -102,7 +102,6 @@ figure();
 xlabel("iterations");
 ylabel("mismatches");
 plot(1:T,miss)
-
 
 
 
