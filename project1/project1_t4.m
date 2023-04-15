@@ -7,10 +7,14 @@ load task4data.mat
 T=50;
 j=4; % # target
 p=100;  % # cells
-for i=1:50
+x=[];
+for i=1:T
     if i==1
-        S_x = randi(p,j,1)   % support
-        x(:,i)=zeros(p,1);   % positions of targets TODO: duplicates
+        S_x = randi(p,j,1); % support
+        while duplicates(S_x)       % check for duplicates
+            S_x = randi(p,j,1);   
+        end
+        x(:,i)=zeros(p,1);   % positions of targets 
         for k=1:j
             x(S_x(k))=1;
         end
@@ -23,7 +27,10 @@ q=25; % # sensors
 
 h=2; % # sensors attacks
 S_a = randi(q,h,1) % support
-a=zeros(q,1);   % positions of targets TODO: duplicates
+while duplicates(S_a)       % check for duplicates
+            S_x = randi(q,h,1);   
+end
+a=zeros(q,1);   % positions of attacks 
 for i=1:h
     a(S_a(i))=30;
 end
@@ -32,19 +39,19 @@ G= [D eye(q)];
 G=normalize(G);
 
 zhat= zeros(p+q,T);     %start xhat=0
-% zhat(:,1)= [x(:,1); zeros(q,1)];      %start xhat== x real
 
 sigma=0.2; % std dev
 nu= sigma*randn(q,1); %noise
 
 y= zeros(q,T);
 for i=1:T
-    y(:,i)= D*x(:,i)+ nu+ a;
+    y(:,i)= D*x(:,i)+ nu+ a;    % unaware attacks
+%     y(:,i)= D*x(:,i)+nu;      %uncomment for aware attacks
+%     y(:,i)= 1.5* y(:,i);
 end
 
 
 epsilon= 1e-8;
-sigma = 1e-2; %standard deviation
 tau= norm(G,2)^(-2) - epsilon;
 lambda=[];
 for i=1: p+q
@@ -69,8 +76,10 @@ for i=1:T
     
 end
 
-% cleaning xhat and ahat
-for i=1:T
+ figure();
+
+ for i=1:T
+    % cleaning xhat and ahat
 
     ind_max= n_greater( zhat(1:p,i), j);
     for l=1:p
@@ -81,27 +90,70 @@ for i=1:T
         end
     end
 
-    ind_max= n_greater( zhat(p+1:p+q,i), h);
-    for l=p+1:p+q
-        if ~ismember(l,ind_max)
-           zhat(l,i)=0;
-        end
-    end
+%     ind_max= n_greater( zhat(p+1:p+q,i), h);
+%     for l=p+1:p+q
+%         if ~ismember(l,ind_max)
+%            zhat(l,i)=0;
+%         end
+%     end
 
+    for l=p+1:p+q
+        if zhat(l,i)<2
+            zhat(l,i)=0;
+        end
+    end   
+    
+    %processing misses
     [x_zero_norm, x_indices] = zero_norm(x(:,i));
     [xfound_zero_norm, xfound_indices] = zero_norm(zhat(1:p,i));
     if ~compare(x_indices,xfound_indices)
          miss(i) = 1;
     end
+    
+    % generating dynamic plot
+    
+    nonzerox= n_greater(x(:,i),j);
+    nonzeroxhat= n_greater(zhat(1:p,i),j);
 
+    xaxis=[];
+    yaxis=[];
+    
+    xaxishat=[];
+    yaxishat=[];
+
+    for k=1:j
+        d= nonzerox(k)/10;
+        r= mod(nonzerox(k),10);
+        d1= nonzeroxhat(k)/10;
+        r1= mod(nonzeroxhat(k),10);
+        if r==0
+            xaxis(end+1)=10;
+            yaxis(end+1)=10-d;
+            xaxishat(end+1)=10;
+            yaxishat(end+1)=10-d1;
+        else
+            xaxis(end+1)=r;
+            yaxis(end+1)=10-d;
+            xaxishat(end+1)=r1;
+            yaxishat(end+1)=10-d1;
+        end
+    end
+    
+    scatter(xaxis, yaxis, 80, "red");
+    hold on
+    scatter(xaxishat, yaxishat, 50, "blue");
+    hold off
+    
+    pause(0.5);
 end
 
 miss
 
 figure();
+plot(1:T,miss)
 xlabel("iterations");
 ylabel("mismatches");
-plot(1:T,miss)
+
 
 
 
