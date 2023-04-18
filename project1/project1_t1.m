@@ -58,6 +58,7 @@ for q=Q
             miss = miss+1;
         end
     end
+
     
     misses(end+1) = miss;
     means(end+1) = mean(iterations);

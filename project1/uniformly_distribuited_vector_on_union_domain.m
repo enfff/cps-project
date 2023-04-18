@@ -14,7 +14,7 @@ S = find(v > b2 & v < b3);
 
 if ~isempty(S)
     for i = 1:size(S) % Controlla se esiste costrutto in
-        while v(S(i)) > -1 && v(S(i)) < 1
+        while v(S(i)) > b1 && v(S(i)) < b3
             v(S(i)) = (scala*rand(1)) - traslazione;
         end
     end

@@ -1,4 +1,8 @@
 function indices = n_greater(vector, n)
+% Finds the support of the first n-greatest values in vector
+% vector - input vector
+% n - number of maxes
+
     indices= zeros(n,1);
     for i=1:n
         indices(i)=i;
