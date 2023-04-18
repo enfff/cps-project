@@ -85,9 +85,43 @@ for k=1:T
         end
     end
     
-    % L'iterazione a cui è uscita è quello che corrisponde all'end in
-    % Z(:,:,end)
+    % L'iterazione a cui è uscita è quello che corrisponde a
+    % Z(:,:,k+1)
 
     
 end
 
+z_est = Z(:,:,k+1); % Sensors Consensus
+X = z_est(1:n, :);
+A = z_est(n+1:n+q, :);
+cvg_time = k+1;
+
+miss = 0;
+for i=1:q
+    A(:, i) = prune_array(A(:, i), 0.2);
+%     ind_max = n_greatest(A(:, i), 2);
+%     for l=1:q
+%         if ismember(l,ind_max)
+%             A(l,i)=1;
+%         else
+%             A(l,i)=0;
+%         end
+%     end
+
+    [~, a_found_indices] = zero_norm(A(:, i));
+    [~, a_indices] = zero_norm(a);
+    
+    if ~compare(a_found_indices,a_indices)
+        miss = miss+1;
+    end
+end
+
+X_mean = zeros(n, 1);
+for i=1:q
+    X_mean = X_mean + X(:, i);
+end
+X_mean = X_mean / q;
+
+miss
+X_mean
+accuracy = norm(x_tilde - X_mean)^2
