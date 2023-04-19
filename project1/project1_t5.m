@@ -4,7 +4,7 @@ clc;
 
 load stochasticmatrices
 
-%
+% TODO: Sistemare la stima di a!!
 
 % Dovremmo anche verificare che l'autovalore max = 1 è UNICO; l'abbiamo
 % visto empiricamente e poi abbiamo pisciato
