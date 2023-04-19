@@ -65,8 +65,8 @@ end
 miss
 
 plot(T,accuracy,".");
-xlabel("iterations");
-ylabel("accuracy");
+xlabel("Iterations");
+ylabel("Accuracy (%)");
 axis padded
 ylim([98, 100])
 grid;
