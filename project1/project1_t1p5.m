@@ -2,9 +2,7 @@ close all;
 clear all;
 clc;
 
-%%%%%%%%%%%%%%%%%%
-% Task 1 point 5 %
-%%%%%%%%%%%%%%%%%%
+%% Task 1 part 5
 
 format long
 
@@ -81,8 +79,6 @@ for t=1:30
     
 
 end
-
-lambda
 
 figure(1)
 subplot(2,2,1);
