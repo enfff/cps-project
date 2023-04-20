@@ -1,12 +1,15 @@
-Q1 = 1*ones(5);
-Q2 = 2*ones(5);
-Q3 = 3*ones(5);
-Q4 = 4*ones(5);
+figure(2)
 
-topologies = {Q1, Q2, Q3, Q4};
-misses = zeros(1,4);
-Q = zeros(5);
-for idx=1:4
-    Q = topologies{idx};
-    misses(idx) = idx;
-end
+domain = linspace(-2,20);
+hold on;
+plot(domain, essential_eigenvalues(1).^domain, "r-");
+plot(domain, essential_eigenvalues(2).^domain, "g-");
+plot(domain, essential_eigenvalues(3).^domain, "b-");
+plot(domain, essential_eigenvalues(2).^domain, "k-");
+ylabel("Convergence Speed");
+xlabel("Time");
+axis tight
+title("YOLO AGGIUNGI TITOLO");
+% grid, legend('$Q_1$','$Q_2$', '$Q_3$', '$Q_3$', 'Interpreter','latex');
+grid
+hold off;
