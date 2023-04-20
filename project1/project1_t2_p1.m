@@ -10,7 +10,7 @@ delta = 1e-12;
 
 big_lambda = [zeros(n, 1)' ones(q, 1)']';
 
-L=(1e-2)* big_lambda;
+L=(1e-3)* big_lambda;
 num_iterations=1000;
 T=1:num_iterations;
 accuracy=[];
@@ -32,7 +32,6 @@ for i=T
     
     a(S_a(1))= a_i1;
     a(S_a(2))= a_i2;
-    a
 
     y = C*x + nu + a;   % [C I] [x a]' + nu
     [~, a_indices] = zero_norm(a);
@@ -53,6 +52,7 @@ for i=T
     [~, afound_indices] = zero_norm(a_found);
     % Compares two vector componently-wise, returns 1 if they're equal,
     % returns 0 if at least one component is different
+
     if ~compare(a_indices,afound_indices)  
         miss = miss+1;
     end

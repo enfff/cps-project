@@ -10,7 +10,7 @@ delta = 1e-12;
 
 big_lambda = [zeros(n, 1)' ones(q, 1)']';
 
-L=(1e-2)* big_lambda;
+L=(1e-3)* big_lambda;
 num_iterations=1000;
 T=1:num_iterations;
 accuracy=[];
@@ -43,7 +43,7 @@ for i=T
         end
         w_0 = w;
     end
-   
+
     x_found= [eye(n) zeros(n,q)]*w;
     a_found= [zeros(q,n) eye(q)]*w;
 
