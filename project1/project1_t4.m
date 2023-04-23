@@ -4,6 +4,8 @@ clc;
 
 load task4data.mat
 
+unaware=0;  % 0= aware attacks    1=unaware attacks
+
 T=100;
 j=4; % # target
 p=100;  % # cells
@@ -25,17 +27,23 @@ for i=1:T
 end
 
 q=25;   % # sensors
-h=2;    % # sensors attacks
+h=4;    % # sensors attacks
 
 
 S_a = randi(q,h,1); % support        % calcualtes support of a (attack vec)
 while duplicates(S_a)               % check for duplicates
     S_a= randi(q,h,1);   
 end
-a=zeros(q,1);                       % positions of attacks 
-for i=1:h
-    a(S_a(i))= 30;
+a=zeros(q,T);                       % positions of attacks 
+
+if unaware
+    for k=1:T
+        for i=1:h
+            a(S_a(i),k)= 30;
+        end
+    end
 end
+
 
 G= [D eye(q)];
 G=normalize(G);
@@ -47,9 +55,13 @@ nu= sigma*randn(q,1); %noise
 
 y= zeros(q,T);
 for i=1:T
-    y(:,i)= D*x(:,i)+ nu+ a;    % unaware attacks
-%     y(:,i)= D*x(:,i)+nu;      %uncomment for aware attacks
-%     y(:,i)= 1.5* y(:,i);
+    y(:,i)= D*x(:,i)+ nu;    
+    if ~unaware
+        for k=1:h
+            a(S_a(k),i)= 0.5*y(S_a(k),i);
+        end
+    end
+    y(:,i)= y(:,i)+ a(:,i);
 end
 
 epsilon= 1e-8;
@@ -60,6 +72,7 @@ for i=1: p+q
         lambda(i)=10;
     else
         lambda(i)=20;
+        %lambda(i)=200;
     end
 end
 
@@ -121,7 +134,7 @@ end
     
     nonzerox= n_greatest(x(:,i),j);
     nonzeroxhat= n_greatest(zhat(1:p,i),j);
-    nonzeroa= n_greatest(a,h);
+    nonzeroa= n_greatest(a(:,i),h);
     nonzeroahat= n_greatest(zhat(p+1:p+q,i),h);
 
     xaxis=[];
