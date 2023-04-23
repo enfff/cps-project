@@ -4,7 +4,7 @@ clc;
 
 load task4data.mat
 
-T=50;
+T=100;
 j=4; % # target
 p=100;  % # cells
 x=[];
@@ -47,9 +47,9 @@ nu= sigma*randn(q,1); %noise
 
 y= zeros(q,T);
 for i=1:T
-%     y(:,i)= D*x(:,i)+ nu+ a;    % unaware attacks
-    y(:,i)= D*x(:,i)+nu;      %uncomment for aware attacks
-    y(:,i)= 1.5* y(:,i);
+    y(:,i)= D*x(:,i)+ nu+ a;    % unaware attacks
+%     y(:,i)= D*x(:,i)+nu;      %uncomment for aware attacks
+%     y(:,i)= 1.5* y(:,i);
 end
 
 epsilon= 1e-8;
@@ -102,16 +102,8 @@ end
         end
     end
 
-%     ind_max= n_greatest( zhat(p+1:p+q,i), h);
-%     for l=p+1:p+q
-%         if ~ismember(l,ind_max)
-%            zhat(l,i)=0;
-%         end
-%     end
-
-    % Cosa fa sta cosa???
     for l=p+1:p+q
-        if zhat(l,i)<2
+        if norm(zhat(l,i))<2
             zhat(l,i)=0;
         end
     end   
@@ -129,12 +121,22 @@ end
     
     nonzerox= n_greatest(x(:,i),j);
     nonzeroxhat= n_greatest(zhat(1:p,i),j);
+    nonzeroa= n_greatest(a,h);
+    nonzeroahat= n_greatest(zhat(p+1:p+q,i),h);
 
     xaxis=[];
     yaxis=[];
                     
     xaxishat=[];
     yaxishat=[];
+
+    xaxis_a=[];
+    yaxis_a=[];
+                    
+    xaxishat_a=[];
+    yaxishat_a=[];
+
+    %plot for targets position estimation
    
     for k=1:j
         d= nonzerox(k)/10;
@@ -153,16 +155,39 @@ end
             yaxishat(end+1)=10-d1;
         end
     end
-    
-    
 
-    scatter(xaxis, yaxis, 80, "red");
+     %plot for attacks estimation
+
+    for k=1:h
+        d= nonzeroa(k)/10;
+        r= mod(nonzeroa(k),10);
+        d1= nonzeroahat(k)/10;
+        r1= mod(nonzeroahat(k),10);
+        if r==0
+            xaxis_a(end+1)=10;
+            yaxis_a(end+1)=10-d;
+            xaxishat_a(end+1)=10;
+            yaxishat_a(end+1)=10-d1;
+        else
+            xaxis_a(end+1)=r;
+            yaxis_a(end+1)=10-d;
+            xaxishat_a(end+1)=r1;
+            yaxishat_a(end+1)=10-d1;
+        end
+    end
+
+    scatter(xaxis, yaxis, 120, "red", 'LineWidth', 2);
+    hold on
+    scatter(xaxis_a, yaxis_a, 100, "green", 'filled');
     axis equal;
     xlim([0 10]);
     ylim([0 10]);
 
     hold on
-    scatter(xaxishat, yaxishat, 50, "blue");
+    scatter(xaxishat, yaxishat, 70, "blue", 'filled');
+    hold on
+    scatter(xaxishat_a, yaxishat_a, 120, "*", 'LineWidth', 2);
+    grid
     hold off
     
     pause(0.1);
