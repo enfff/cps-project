@@ -50,7 +50,22 @@ X_means = zeros(max_iterations, 4, n, 1); % Media del consenso sullo stato
 
 topologies = {Q1, Q2, Q3, Q4};
 
-%% 
+
+% Checking that Q_i are doubly stochastic. (Serve per la condizione sufficiente)
+delta = 1e4;
+for idx=1:4
+    Q = topologies{idx};
+    for i=1:20
+        if (sum(Q(i, :)) - 1) > delta || (sum(Q(:, i)) - 1) > delta
+            disp(['Matrix Q', num2str(idx), ' not doubly stochastic'])
+            sum(Q(i, :))
+            sum(Q(:, i))
+            return
+        end
+    end
+end
+
+disp('tutto ok!! matrici doppio stocastiche')
 
 % La metto fuori perché dobbiamo calcolarlo una volta sola per tutte e
 % venti le iterazioni
@@ -59,10 +74,15 @@ Q = topologies{idx}; % Itera tra le matrici dentro topologies
         % Calcola essential eigenvalues per Q; ci serve dopo
         tmp = abs(eig(Q));
         eigenvalues{idx} = tmp;
+        eigenvalues{idx} = abs(eigenvalues{idx});
         essential_eigenvalues(idx) = tmp(end - 1);
         clear tmp; % tmp non ci serve più
+        disp(['Q', num2str(idx), ' max eigenvalue is ', num2str(max(eigenvalues{idx}))])
+        % Since the sufficient condition is satisfied (max eigenvalue == 1), we didn't
+        % investigate any further.
 end
 
+%% 
 % La ciccia sta qua
 for iteration=1:max_iterations
     for idx=1:4
