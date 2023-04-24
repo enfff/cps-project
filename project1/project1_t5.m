@@ -127,37 +127,38 @@ figure(1)
 
 % Rate of attack detection: how many times the support of a is correctly
 % estimated, i.e., we identify the sensors under attack?
-subplot(2,1,1);
+subplot(2,2,1);
 xlabel("Iterations");
 ylabel("Misses (%)");
 title("Attack Detection Rate");
 axis padded
 hold on;
-plot(iterations, misses(:, 1)'/20, 'ro');
-plot(iterations, misses(:, 2)'/20, 'g.');
-plot(iterations, misses(:, 3)'/20, 'b^');
-plot(iterations, misses(:, 4)'/20, 'k*');
+plot(iterations, misses(:, 1)'/20, 'r-o');
+plot(iterations, misses(:, 2)'/20, 'g-.');
+plot(iterations, misses(:, 3)'/20, 'b-^');
+plot(iterations, misses(:, 4)'/20, 'k-*');
 grid, legend('$Q_1$','$Q_2$', '$Q_3$', '$Q_4$', 'Interpreter','latex');
 hold off;
 
 % Estimation accuracy
 
-subplot(2,1,2);
+subplot(2,2,2);
 xlabel("Iterations");
 ylabel("Accuracy (%)");
 title("State Estimation Accuracy");
 axis padded
 hold on;
 plot(iterations, 100 - accuracies(:, 1)', 'r-o');
-plot(iterations, 100 - accuracies(:, 2)', 'g-o');
-plot(iterations, 100 - accuracies(:, 3)', 'b-o');
-plot(iterations, 100 - accuracies(:, 4)', 'k-o');
+plot(iterations, 100 - accuracies(:, 2)', 'g-.');
+plot(iterations, 100 - accuracies(:, 3)', 'b-^');
+plot(iterations, 100 - accuracies(:, 4)', 'k-*');
 grid, legend('$Q_1$','$Q_2$', '$Q_3$', '$Q_4$', 'Interpreter','latex');
 hold off;
 
 % Convergence time (= number of iterations): can you see a relationship
 % between the essential spectral radius of Q and the convergence time?
-figure(2)
+% figure(2)
+subplot(2, 2, [3 4])
 domain = linspace(-2,20);
 hold on;
 plot(domain, essential_eigenvalues(1).^domain, "r-");
