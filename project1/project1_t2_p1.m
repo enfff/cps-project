@@ -1,4 +1,4 @@
-clear all;
+clear;
 close all;
 clc;
 
@@ -13,17 +13,17 @@ big_lambda = [zeros(n, 1)' ones(q, 1)']';
 L=(1e-3)* big_lambda;
 num_iterations=1000;
 T=1:num_iterations;
-accuracy=[];
-miss=0; % Counts the number of times
+accuracy=zeros(num_iterations, 1);
+miss=zeros(num_iterations, 1); % Counts the number of times
 
 for i=T
     a= zeros(q,1);   %attacks vector
     C= randn(q,n);
     x= randn(n,1);
     S_a= randi(q,h,1); %support of attacks vector % could contain duplicates
-    nu = sigma*randn(q,1);
-   % nu=0;
-    epsilon = 1e-8; %precision (?)
+%     nu = sigma*randn(q,1);
+    nu=0;
+    epsilon = 1e-8; %precision
     tau = norm(C,2)^(-2) - epsilon;
     
     %set non-zero values of a (case with zero_norm(a)=2 )
@@ -54,20 +54,21 @@ for i=T
     % returns 0 if at least one component is different
 
     if ~compare(a_indices,afound_indices)  
-        miss = miss+1;
+        miss(i) = miss(i)+1;
     end
 
-    accuracy(i)= 100 - norm(x_found - x,2);
+    accuracy(i)= norm(x_found - x,2);
     % Distance between x_found and x. The lower the better.
-    % Sottraggo 100 così l'accuracy è al 100% quando la norma è nulla
 end
 
-miss
+%%
+
+display(mean(miss)*100);
+disp(max(accuracy));
+disp(min(accuracy));
 
 plot(T,accuracy,".");
 xlabel("Iterations");
-ylabel("Accuracy (%)");
+ylabel("Accuracy");
 axis padded
-ylim([98, 100])
 grid;
-
