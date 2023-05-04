@@ -13,26 +13,7 @@ tau = 0.03;
 sigma = 1e-2;
 nu = sigma*randn(q,1);
 delta = 1e-7;
-T = 1e2;
-
-S_a = randi(q,h,1);                 % calculates support of a (attack vec)
-while duplicates(S_a)               % check for duplicates
-    S_a = randi(q,h,1);   
-end
-
-% Generates support of a
-a = zeros(q,1);
-a_i1= 1+ rand(1);
-a_i2= -a_i1;   
-a(S_a(1))= a_i1;
-a(S_a(2))= a_i2;
-clear a_i1 ai2;
-
-C = randn(q, n);
-x_tilde = rand(n ,1);
-y = C*x_tilde + nu + a;             % Genera y
-L = 2e-4*[zeros(n,1); ones(q, 1)];
-G = [C eye(q)];
+T = 1e5;
 
 % conservo i dati per i plot
 % rimangono fissi per ogni iterazione
@@ -42,14 +23,11 @@ max_iterations = 20;
 
 % variano per ogni iterazione
 cvg_times = zeros(max_iterations, 4);
-misses = zeros(max_iterations, 4); % Quante volte sbaglia a stiamre il supporto
+misses = zeros(max_iterations, 4); % Quante volte sbaglia a stimare il supporto
 accuracies = zeros(max_iterations, 4); % Quanto precisamente è stato stimato lo stato
 X_means = zeros(max_iterations, 4, n, 1); % Media del consenso sullo stato
 
 topologies = {Q1, Q2, Q3, Q4};
-% 
-% %% 
-% 
 
 % La metto fuori perché dobbiamo calcolarlo una volta sola per tutte e
 % venti le iterazioni
@@ -62,15 +40,18 @@ Q = topologies{idx}; % Itera tra le matrici dentro topologies
         clear tmp; % tmp non ci serve più
 end
 
-%
 
 for iteration=1:max_iterations
 
     a = zeros(q,1);
-    a_i1= 1+ rand(1);
+    a_i1= 1 + rand(1);
     a_i2= -a_i1;   
+    S_a = randi(q,h,1);                 % calculates support of a (attack vec)
     a(S_a(1))= a_i1;
     a(S_a(2))= a_i2;
+    while duplicates(S_a)               % check for duplicates
+        S_a = randi(q,h,1);   
+    end
 
     C = randn(q, n);
     x_tilde = rand(n ,1);
@@ -107,7 +88,6 @@ for iteration=1:max_iterations
 
                 z_prec = z_curr;
             end
-                
             
             
         end
@@ -131,6 +111,7 @@ for iteration=1:max_iterations
         end
         
         % Calcola il valor medio dello stato stimato da tutti i sensori
+        % nell'iterazione k+1-esima
         X_mean = zeros(n, 1);
         for i=1:q
             X_mean = X_mean + X(:, i);
@@ -184,10 +165,20 @@ plot(iterations, accuracies(:, 4)', 'k.-');
 grid, legend('$Q_1$','$Q_2$', '$Q_3$', '$Q_4$', 'Interpreter','latex');
 hold off;
 
-% Convergence time (= number of iterations): can you see a relationship
+% Convergence time (1)
+subplot(2,2,3)
+hold on;
+plot(iterations, cvg_times(:, 1)', 'r.-');
+plot(iterations, cvg_times(:, 2)', 'g.-');
+plot(iterations, cvg_times(:, 3)', 'b.-');
+plot(iterations, cvg_times(:, 4)', 'k.-');
+grid, legend('$Q_1$','$Q_2$', '$Q_3$', '$Q_4$', 'Interpreter','latex');
+axis padded
+hold off;
+
+% Convergence time (2) (= number of iterations): can you see a relationship
 % between the essential spectral radius of Q and the convergence time?
-% figure(2)
-subplot(2, 2, [3 4])
+subplot(2, 2, 4)
 domain = linspace(-2,20);
 hold on;
 plot(domain, essential_eigenvalues(1).^domain, "r-");
