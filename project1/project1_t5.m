@@ -125,19 +125,17 @@ for iteration=1:max_iterations
     end
 end
 
-disp(k)
-disp('done')
-% disp(accuracies)
+disp(accuracies)
 disp(misses)
+disp(cvg_times)
 
 % Plots
 
 iterations = linspace(1, max_iterations, max_iterations);
 figure(1)
-
 % Rate of attack detection: how many times the support of a is correctly
 % estimated, i.e., we identify the sensors under attack?
-subplot(2,2,1);
+% subplot(2,2,1);
 xlabel("Iterations");
 ylabel("Misses (%)");
 title("Attack Detection Rate");
@@ -152,7 +150,8 @@ hold off;
 
 % Estimation accuracy
 
-subplot(2,2,2);
+figure(2)
+% subplot(2,2,2);
 xlabel("Iterations");
 ylabel("Accuracy (%)");
 title("State Estimation Accuracy");
@@ -165,8 +164,9 @@ plot(iterations, accuracies(:, 4)', 'k.-');
 grid, legend('$Q_1$','$Q_2$', '$Q_3$', '$Q_4$', 'Interpreter','latex');
 hold off;
 
+figure(3)
 % Convergence time (1)
-subplot(2,2,3)
+subplot(2,1,1)
 hold on;
 plot(iterations, cvg_times(:, 1)', 'r.-');
 plot(iterations, cvg_times(:, 2)', 'g.-');
@@ -178,7 +178,7 @@ hold off;
 
 % Convergence time (2) (= number of iterations): can you see a relationship
 % between the essential spectral radius of Q and the convergence time?
-subplot(2, 2, 4)
+subplot(2,1,2)
 domain = linspace(-2,20);
 hold on;
 plot(domain, essential_eigenvalues(1).^domain, "r-");
