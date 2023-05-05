@@ -72,23 +72,24 @@ for iteration=1:max_iterations
                     arg = arg + Q(i,j)*z_prec(:, j);
                 end
                 z_curr(:, i) = IST(arg + tau*G(i,:)'*(y(i)-G(i,:)*z_prec(:, i)), L);
-                
 
-                if k>1
-                    diff = 0;
-                        for w=1:q
-                            diff = diff + norm(z_curr(:, w) - z_prec(:, w), 2);
-                        end
-                
-                    if diff < delta % Stop criterion
-                        disp(['Exit condition satisfied! Time: ', num2str(k)])
-                        break
-                    end
-                end
-
+                z_prec_2 = z_prec; % per la condizione di uscita, non piace manco a me
                 z_prec = z_curr;
+                
             end
             
+            % exit condition
+            if k>1
+                diff = 0;
+                for w=1:q
+                    diff = diff + norm(z_curr(:, w) - z_prec_2(:, w), 2);
+                end
+                
+                if diff < delta % Stop criterion
+                        disp(['Exit condition satisfied! Time: ', num2str(k)])
+                    break
+                end
+            end
             
         end
 
