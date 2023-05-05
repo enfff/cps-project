@@ -130,7 +130,7 @@ disp(accuracies)
 disp(misses)
 disp(cvg_times)
 
-% Plots
+%% Plots
 
 iterations = linspace(1, max_iterations, max_iterations);
 figure(1)
@@ -174,6 +174,7 @@ plot(iterations, cvg_times(:, 2)', 'g.-');
 plot(iterations, cvg_times(:, 3)', 'b.-');
 plot(iterations, cvg_times(:, 4)', 'k.-');
 grid, legend('$Q_1$','$Q_2$', '$Q_3$', '$Q_4$', 'Interpreter','latex');
+title("Convergence time")
 axis padded
 hold off;
 
