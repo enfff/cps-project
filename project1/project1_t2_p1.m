@@ -1,6 +1,8 @@
 clear;
 close all;
-clc;
+% clc;
+
+casetype = 'noisefree'; % accepted values: noise, noisefree;
 
 n = 10; % dimension of x
 q = 20; % dimension of y
@@ -20,19 +22,26 @@ for i=T
     a= zeros(q,1);   %attacks vector
     C= randn(q,n);
     x= randn(n,1);
-    S_a= randi(q,h,1); %support of attacks vector % could contain duplicates
-%     nu = sigma*randn(q,1);
-    nu=0;
+    
+    a_i1= 1 + rand(1);                  % generates a value in [1, 2]
+    a_i2= -a_i1;
+    S_a = randi(q,h,1);                 % calculates the attack vector support a
+    a(S_a(1))= a_i1;
+    a(S_a(2))= a_i2;
+    while duplicates(S_a)               % check for duplicates
+        S_a = randi(q,h,1);   
+    end
+
+    switch casetype
+        case 'noise'
+            nu = sigma*randn(q,1);
+        case 'noisefree'
+            nu = 0;
+    end
+    
     epsilon = 1e-8; %precision
     tau = norm(C,2)^(-2) - epsilon;
     
-    %set non-zero values of a (case with zero_norm(a)=2 )
-    a_i1= 1+ rand(1);
-    a_i2= -a_i1;
-    
-    a(S_a(1))= a_i1;
-    a(S_a(2))= a_i2;
-
     y = C*x + nu + a;   % [C I] [x a]' + nu
     [~, a_indices] = zero_norm(a);
     w_0 = zeros(n+q,1);    %w= [x a]'
@@ -57,11 +66,11 @@ for i=T
         miss(i) = miss(i)+1;
     end
 
-    accuracy(i)= norm(x_found - x,2);
+    accuracy(i)= norm(x_found - x,2)^2;
     % Distance between x_found and x. The lower the better.
 end
 
-%%
+%% Plots
 
 display(mean(miss)*100);
 disp(max(accuracy));
@@ -70,5 +79,13 @@ disp(min(accuracy));
 plot(T,accuracy,".");
 xlabel("Iterations");
 ylabel("Accuracy");
+
+switch casetype
+    case 'noise'
+        title("Unaware attack, with noise")
+    case 'noisefree'
+        title("Unaware attack, noise free")
+end
+
 axis padded
 grid;
