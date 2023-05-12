@@ -11,21 +11,15 @@ means = []; % contains the mean convergence time for each value of tau
 maxes = []; % contains the max convergence time for each value of tau
 mins = []; % contains the minimum convergence time for each value of tau
 
-tau=zeros(30, 1); % array containing the different values of tau
 p = 20; % dimension of x
 q= 10; % dimension of y 
 C = randn(q,p);
+tau=0:0.0001:(norm(C,2)^-2-1e-8); % array containing the different values of tau
 
-for t=1:30 % number of different values of tau used 
+for t=1:length(tau) % number of different values of tau used 
     miss = 0;
     inner_iterations = 20;
     iterations = zeros(inner_iterations,1);
-
-    if t==1
-        tau(t) = norm(C,2)^(-2) - 1e-8;  
-    else                    
-        tau(t) = tau(t-1) - tau(t-1)*0.2;   % if 1e-3 or greater IST does not converge
-    end
  
     lambda = 1e-1; % labda*tau is constant and equal to 1e-1
     L = lambda*ones(p,1); 
@@ -36,8 +30,8 @@ for t=1:30 % number of different values of tau used
 
     for i=1:inner_iterations
         x = zeros(p, 1);
-        x_1 = 1 + rand(1)
-        x_2 = -x_1
+        x_1 = 1 + rand(1);
+        x_2 = -x_1;
         x_0 = zeros(p,1); % starting array
 
         % set to 0 all the elements of x that do not belong to 
@@ -96,40 +90,66 @@ for t=1:30 % number of different values of tau used
 
 end
 
+theta_miss = [(tau').^3 (tau').^2 (tau') (tau').^0]\misses';
+theta_mean = [(tau').^3 (tau').^2 (tau') (tau').^0]\means';
+theta_max = [(tau').^3 (tau').^2 (tau') (tau').^0]\maxes';
+theta_min = [(tau').^3 (tau').^2 (tau') (tau').^0]\mins';
+
+est_miss = theta_miss(1)*tau.^3 + theta_miss(2)*tau.^2 + theta_miss(3)*tau + theta_miss(4);
+est_mean = theta_mean(1)*tau.^3 + theta_mean(2)*tau.^2 + theta_mean(3)*tau + theta_mean(4);
+est_max = theta_max(1)*tau.^3 + theta_max(2)*tau.^2 + theta_max(3)*tau + theta_max(4);
+est_min = theta_min(1)*tau.^3 + theta_min(2)*tau.^2 + theta_min(3)*tau + theta_min(4);
+
 %plots the number of misevaluations in function of tau
 
 figure(1)
 subplot(2,2,1);
-plot(tau,misses,"ko-");
+hold on
+plot(tau,misses,"k-");
+plot(tau,est_miss,"r-","LineWidth",2);
 xlabel("$\tau$","Interpreter","latex");
 ylabel("Number of misevaluations");
 title("Number of misevaluations in function of $\tau$","Interpreter","latex");
 grid;
+legend(["True Data","Trend"])
+hold off
 
 %plots the mean convergence time in function of tau
 
 subplot(2,2,2)
-plot(tau,means,"ro-");
+hold on
+plot(tau,means,"k-");
+plot(tau,est_mean,"r-","LineWidth",2);
 xlabel("$\tau$","Interpreter","latex");
 ylabel("Mean Convergence time");
 title("Mean convergence time in function of $\tau$","Interpreter","latex");
 grid;
+legend(["True Data","Trend"])
+hold off
 
 %plots the max convergence time in function of tau
 
 subplot(2,2,3)
-plot(tau,maxes,"bo-");
+hold on
+plot(tau,maxes,"k-");
+plot(tau,est_max,"r-","LineWidth",2);
 xlabel("$\tau$","Interpreter","latex");
 ylabel("Maximum Convergence time");
 title("Max convergence time in function of $\tau$","Interpreter","latex");
 grid;
+legend(["True Data","Trend"])
+hold off
 
 %plots the min convergence time in function of q
 
 subplot(2,2,4)
-plot(tau,mins,"go-");
+hold on
+plot(tau,mins,"k-");
+plot(tau,est_min,"r-","LineWidth",2);
 xlabel("$\tau$","Interpreter","latex");
 ylabel("Minimum Convergence time");
 title("Min convergence time in function of $\tau$","Interpreter","latex");
 grid;
+legend(["True Data","Trend"])
+hold off
 
