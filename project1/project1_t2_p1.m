@@ -2,7 +2,7 @@ clear;
 close all;
 % clc;
 
-casetype = 'noisefree'; % accepted values: noise, noisefree;
+casetype = 'noise'; % accepted values: noise, noisefree;
 
 n = 10; % dimension of x
 q = 20; % dimension of y
