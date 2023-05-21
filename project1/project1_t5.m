@@ -143,9 +143,9 @@ title("Attack Detection Rate");
 axis padded
 hold on;
 plot(iterations, misses(:, 1)'/20, 'r.-');
-plot(iterations, misses(:, 2)'/20, 'g.-');
-plot(iterations, misses(:, 3)'/20, 'b.-');
-plot(iterations, misses(:, 4)'/20, 'k.-');
+plot(iterations, misses(:, 2)'/20, 'g*');
+plot(iterations, misses(:, 3)'/20, 'b-.');
+plot(iterations, misses(:, 4)'/20, 'ko');
 grid, legend('$Q_1$','$Q_2$', '$Q_3$', '$Q_4$', 'Interpreter','latex');
 hold off;
 
