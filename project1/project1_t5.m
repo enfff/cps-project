@@ -154,7 +154,7 @@ hold off;
 figure(2)
 % subplot(2,2,2);
 xlabel("Iterations");
-ylabel("Accuracy (%)");
+ylabel("Accuracy");
 title("State Estimation Accuracy");
 axis padded
 hold on;
@@ -187,9 +187,8 @@ plot(domain, essential_eigenvalues(1).^domain, "r-");
 plot(domain, essential_eigenvalues(2).^domain, "g-");
 plot(domain, essential_eigenvalues(3).^domain, "b-");
 plot(domain, essential_eigenvalues(4).^domain, "k-");
-ylabel("Convergence Speed");
+ylabel("Exponential decay");
 xlabel("Time (t)");
 axis tight
-title("Convergence time");
 grid, legend('$\lambda_2(Q_1)^t$', '$\lambda_2(Q_2)^t$', '$\lambda_2(Q_3)^t$', '$\lambda_2(Q_4)^t$', 'Interpreter','latex');
 hold off;
