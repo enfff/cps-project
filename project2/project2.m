@@ -9,8 +9,8 @@ N = 6;
 
 %Matrices that describe the maglevs
 A = [
-    0 1;
-    880.87 0
+    0       1;
+    880.87  0
 ];
 
 B = [
@@ -38,7 +38,6 @@ G = [
     1 0 0 0 0 0;
     zeros(5,6)
 ];
-
 
 
 
