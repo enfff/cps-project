@@ -1,4 +1,4 @@
-Neighborhood Output Estimation Error of the i-th agent
+% Neighborhood Output Estimation Error of the i-th agent
 % Ad adj matrix
 % G leader pinning matrix
 % i describes the i-th agent
