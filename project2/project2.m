@@ -20,6 +20,8 @@ B = [
 
 C = [708.27 0];
 
+xhat0 = [0 0]';
+
 %Adjagency Matrix
 Ad = [
     0 0 0 0 0 0;
@@ -39,7 +41,23 @@ G = [
     zeros(5,6)
 ];
 
+% Luenberger Observer
+Lu_obs = place(A', C', [-10 -20])';
 
+% Regulator
+K = place(A, B, [-5, -10]);
 
+% Coupling Gain
+L = D - Ad;
+eigs = eig(L+G);
+c = 0.5/min(real(eigs)) + 0.2;
 
+% Calculating K Gain
+Q = eye(2);
+R =  1;
+P = are(A, B*pinv(R)*B', Q);
+K = pinv(R)*B'*P;
+% chiedi ad enf perche la pseudo inversa
 
+% Calculating F
+F = P*C'*pinv(R);

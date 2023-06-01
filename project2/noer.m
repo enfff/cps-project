@@ -6,7 +6,9 @@
 % yt vector containing all agents' outputs (column i-th element is
 % the i-th agent's state)
 
-function xi = nte(Ad, G, yt0, yt, i)
+function xi = noer(Ad, G, yt0, yt, i)
+    xi = 0;
+
     for j=1:6 % total agents number, i assumed N was a global variable
         xi = xi + Ad(i, j)*(yt(j) - yt(i));
     end
