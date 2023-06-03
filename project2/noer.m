@@ -9,7 +9,7 @@
 function xi = noer(Ad, G, yt0, yt, i)
     xi = 0;
 
-    for j=1:6 % total agents number, i assumed N was a global variable
+    for j=1:6 % total agents number
         xi = xi + Ad(i, j)*(yt(j) - yt(i));
     end
 

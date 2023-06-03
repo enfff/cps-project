@@ -45,7 +45,7 @@ G = [
 Lu_obs = place(A', C', [-10 -20])';
 
 % Regulator
-K = place(A, B, [-5, -10]);
+K_reg = place(A, B, [-5, -10]);
 
 % Coupling Gain
 L = D - Ad;
