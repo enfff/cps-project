@@ -14,14 +14,15 @@ mins = []; % contains the minimum convergence time for each value of tau
 p = 20; % dimension of x
 q= 10; % dimension of y 
 C = randn(q,p);
-tau=0:0.0001:(norm(C,2)^-2-1e-8); % array containing the different values of tau
+epsilon=1e-8;
+tau=0.003:0.0001:(norm(C,2)^(-2) - epsilon); % array containing the different values of tau
 
 for t=1:length(tau) % number of different values of tau used 
     miss = 0;
-    inner_iterations = 20;
+    inner_iterations = 50;
     iterations = zeros(inner_iterations,1);
  
-    lambda = 1e-1; % labda*tau is constant and equal to 1e-1
+    lambda = 1e-2; % labda*tau is constant and equal to 1e-2
     L = lambda*ones(p,1); 
     sigma = 1e-2; % standard deviation
     nu = sigma*randn(q,1); % noise
