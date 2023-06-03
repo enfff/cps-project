@@ -8,8 +8,7 @@
 
 function te = nte(Ad, G, x0, X, i)
     te = zeros(2, 1);
-    for j=1:6 % total agents number, i assumed N was a global variable
-        % non funziona se metto 1:N
+    for j=1:6 % total agents number
         te = te + Ad(i, j)*(X(:, j) - X(:, i));
     end
 

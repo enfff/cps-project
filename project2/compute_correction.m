@@ -1,10 +1,10 @@
 function [corr1, corr2, corr3, corr4, corr5, corr6]  = compute_correction(c,Xi,F)
-    corr1 = 0;
-    corr2 = 0;
-    corr3 = 0;
-    corr4 = 0;
-    corr5 = 0;
-    corr6 = 0;
+    corr1 = zeros(2, 1);
+    corr2 = zeros(2, 1);
+    corr3 = zeros(2, 1);
+    corr4 = zeros(2, 1);
+    corr5 = zeros(2, 1);
+    corr6 = zeros(2, 1);
 
     corr1 = c*F*Xi(1);
     corr2 = c*F*Xi(2);
