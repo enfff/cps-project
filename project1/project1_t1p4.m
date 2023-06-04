@@ -19,7 +19,7 @@ tau=0.003:0.0001:(norm(C,2)^(-2) - epsilon); % array containing the different va
 
 for t=1:length(tau) % number of different values of tau used 
     miss = 0;
-    inner_iterations = 50;
+    inner_iterations = 20;
     iterations = zeros(inner_iterations,1);
  
     lambda = 1e-2; % labda*tau is constant and equal to 1e-2
@@ -69,15 +69,15 @@ for t=1:length(tau) % number of different values of tau used
     
         % checks wheter the original x array and the x_0 estimated array
         % have the same support, if not, the number of misevalutations
-        % for the i-th innver iteration is incremented
+        % for the i-th inner iteration is incremented
         [x0_zero_norm, x0_indices] = zero_norm(x_0);
         if ~compare(x0_indices,x_indices)
             miss = miss+1;
         end
     end
     
-    % saves the number of misevaluations for the current value of tau
-    misses(end+1) = miss;
+    % saves percentage of misevaluations for the current value of tau
+    misses(end+1) = (miss/inner_iterations)*100;
     % saves the mean convergence time for the current value of tau
     % (over all the inner iterations)
     means(end+1) = mean(iterations);
