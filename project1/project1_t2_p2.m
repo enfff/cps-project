@@ -36,12 +36,7 @@ for i=T
 
     a_i1= 1 + rand(1);                  % generates a value in [1, 2]
     a_i2= -a_i1;
-    S_a = randi(q,h,1);                 % calculates the attack vector support a
-    
-    while duplicates(S_a)               % check for duplicates
-        S_a = randi(q,h,1);   
-    end
-
+    S_a = randperm(q, 2);                 % calculates the attack vector support a
     a(S_a(1))= 0.5*y(S_a(1));
     a(S_a(2))= 0.5*y(S_a(2));
 

@@ -46,12 +46,9 @@ for iteration=1:max_iterations
     a = zeros(q,1);
     a_i1= 1 + rand(1);
     a_i2= -a_i1;   
-    S_a = randi(q,h,1);                 % calculates support of a (attack vec)
+    S_a = randperm(q,2);                 % calculates support of a (attack vec)
     a(S_a(1))= a_i1;
     a(S_a(2))= a_i2;
-    while duplicates(S_a)               % check for duplicates
-        S_a = randi(q,h,1);   
-    end
 
     C = randn(q, n);
     x_tilde = rand(n ,1);
@@ -73,9 +70,8 @@ for iteration=1:max_iterations
                 end
                 z_curr(:, i) = IST(arg + tau*G(i,:)'*(y(i)-G(i,:)*z_prec(:, i)), L);
 
-                z_prec_2 = z_prec; % per la condizione di uscita, non piace manco a me
+                z_prec_2 = z_prec; % will be used later for the exit condition
                 z_prec = z_curr;
-                
             end
             
             % exit condition
