@@ -32,20 +32,10 @@ for t=1:length(tau) % number of different values of tau used
     for i=1:inner_iterations
         x = zeros(p, 1);
         x_1 = 1 + rand(1);
-        x_2 = -x_1;
+        x_2 = - 1 - rand(1);
         x_0 = zeros(p,1); % starting array
 
-        % set to 0 all the elements of x that do not belong to 
-        % the pre-determined support
-
-        S_x = randi([1, p], [2 1]);                 % calculates the attack vector support a
-        
-        while duplicates(S_x)               % check for duplicates
-            S_x = randi([1, p], [2 1]);   
-        end
-
-        % disp(["Il  supporto è: "]);
-        % S_x
+        S_x = randperm(p,2); % computes the vector's support
 
         x(S_x(1))= x_1;
         x(S_x(2))= x_2;

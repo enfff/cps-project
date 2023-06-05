@@ -33,18 +33,15 @@ for q=Q
         C = randn(q,p); 
         tau = norm(C,2)^(-2) - epsilon;
         
-        x = 1 + (2-1)*rand(p,1); % vettore x originale
-        x_0 = zeros(p,1);
+        x = zeros(p, 1);
+        x_1 = 1 + rand(1);
+        x_2 = - 1 - rand(1);
+        x_0 = zeros(p,1); % starting array
 
-        mask = randi([1 p],k,1); % generates k non-null indices
+        S_x = randperm(p,2); % computes the vector's support
 
-        % set to 0 all the elements of x that do not belong to 
-        % the pre-determined support
-        for j=1:p
-            if ~ismember(mask,j)
-                x(j) = 0;
-            end
-        end
+        x(S_x(1))= x_1;
+        x(S_x(2))= x_2;
 
         y = C*x + nu;
         [x_zero_norm, x_indices] = zero_norm(x);
