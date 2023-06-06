@@ -4,20 +4,19 @@ clc;
 
 load task4data.mat
 
-unaware=0;  % 0= aware attacks    1=unaware attacks
+unaware=0;  % 0 = aware attacks    1 = unaware attacks
 
 T=100;
 j=4; % # target
 p=100;  % # cells
-x=[];
+x=zeros(100, 100);
 
 for i=1:T
     if i==1
-        S_x = randi(p,j,1);         % calculates support of x
-        while duplicates(S_x)       % checks for duplicates
-            S_x = randi(p,j,1);   
-        end
-        x(:,i)=zeros(p,1);          % positions of targets 
+        S_x = randperm(p, j);       % calculates support of x
+        S_x = S_x';
+        x(:,i)=zeros(p,1);          % positions of targets
+        
         for k=1:j
             x(S_x(k))=1;
         end
@@ -29,11 +28,9 @@ end
 q=25;   % # sensors
 h=4;    % # sensors attacks
 
+S_a = randperm(q, h);              % calculates the support of a (attack vec)
+S_a = S_a';
 
-S_a = randi(q,h,1); % support        % calcualtes support of a (attack vec)
-while duplicates(S_a)               % check for duplicates
-    S_a= randi(q,h,1);   
-end
 a=zeros(q,T);                       % positions of attacks 
 
 if unaware
@@ -66,18 +63,9 @@ end
 
 epsilon= 1e-8;
 tau= norm(G,2)^(-2) - epsilon;
-lambda=[];
-for i=1: p+q
-    if i<=p
-        lambda(i)=10;
-    else
-        lambda(i)=20;
-        %lambda(i)=200;
-    end
-end
 
-% lambda = [10*ones(p, 1); 20*ones(q, 1)];
-% lambda = lambda';
+lambda = [10*ones(p, 1); 20*ones(q, 1)];
+lambda = lambda';
 
 S_x
 S_a
@@ -85,10 +73,8 @@ S_a
 L= tau*lambda;
 miss=zeros(T,1);
 
-
-%% 
-
 % Sparse Oberver algorithm
+
 for i=1:T
     zhat_middle = IST(zhat(:,i)+tau*G'*(y(:,i)-G*zhat(:,i)),L);
     
@@ -137,17 +123,17 @@ end
     nonzeroa= n_greatest(a(:,i),h);
     nonzeroahat= n_greatest(zhat(p+1:p+q,i),h);
 
-    xaxis=[];
-    yaxis=[];
+    xaxis=zeros(1, 4);
+    yaxis=zeros(1, 4);
                     
-    xaxishat=[];
-    yaxishat=[];
+    xaxishat=zeros(1, 4);
+    yaxishat=zeros(1, 4);
 
-    xaxis_a=[];
-    yaxis_a=[];
+    xaxis_a=zeros(1, 4);
+    yaxis_a=zeros(1, 4);
                     
-    xaxishat_a=[];
-    yaxishat_a=[];
+    xaxishat_a=zeros(1, 4);
+    yaxishat_a=zeros(1, 4);
 
     %plot for targets position estimation
    
@@ -203,13 +189,17 @@ end
     grid
     hold off
     
-    pause(0.1);
+    pause(0.1); 
  end
 
 miss
 
-figure();
-plot(1:T,miss)
-xlabel("iterations");
-ylabel("mismatches");
+%% 
 
+figure;
+plot(1:T,miss, ".");
+yticklabels({'Correct', '', '', '', '', '', '', '', '', '', 'Uncorrect'})
+
+xlabel("Iterations");
+ylabel("State Support Estimation");
+axis padded
