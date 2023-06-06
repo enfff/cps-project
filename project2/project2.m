@@ -21,6 +21,7 @@ B = [
 C = [708.27 0];
 
 xhat0 = [0 0]';
+x0 = [1; 0];
 
 %Adjagency Matrix
 Ad = [
