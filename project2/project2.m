@@ -21,7 +21,8 @@ B = [
 C = [708.27 0];
 
 xhat0 = [0 0]';
-x0 = [1; 0];
+x0_followers = [1 0]';
+x0= x0_followers;
 
 %Adjagency Matrix
 Ad = [
@@ -39,26 +40,28 @@ D = diag([0 1 1 1 1 1]);
 %Pinning Matrix
 G = [
     1 0 0 0 0 0;
-    zeros(5,6)
+    zeros(4,6);
+    0 0 0 0 0 0
 ];
 
-% Luenberger Observer
-Lu_obs = place(A', C', [-10 -20])';
+% Luenberger Observer for the leader
+Lu_obs = (place(A', C', [-20, -10]))';
 
-% Regulator
+% Regulator for the leader
 K_reg = place(A, B, [-5, -10]);
 
 % Coupling Gain
 L = D - Ad;
 eigs = eig(L+G);
-c = 0.5/min(real(eigs)) + 0.2;
+c = (0.5/min(real(eigs))) + 1.5;
 
 % Calculating K Gain
-Q = eye(2);
+Q = 5*eye(2);
 R =  1;
 P = are(A, B*pinv(R)*B', Q);
 K = inv(R)*B'*P;
 % chiedi ad enf perche la pseudo inversa
 
 % Calculating F
-F = P*C'*inv(R);
+Pf= are(A, C'*pinv(R)*C, Q);
+F = Pf*C'*inv(R);
