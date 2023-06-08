@@ -59,12 +59,12 @@ c = (0.5/min(real(eigs))) + 1.5;
 Q = 5*eye(2);
 R =  1;
 P = are(A, B*pinv(R)*B', Q);
-K = inv(R)*B'*P;
+K = R\B'*P;
 % chiedi ad enf perche la pseudo inversa
 
 % Calculating F
 Pf= are(A, C'*pinv(R)*C, Q);
-F = Pf*C'*inv(R);
+F = Pf*C'/R;
 
 %% System Simulation
 
