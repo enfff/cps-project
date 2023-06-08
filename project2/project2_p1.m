@@ -65,3 +65,119 @@ K = inv(R)*B'*P;
 % Calculating F
 Pf= are(A, C'*pinv(R)*C, Q);
 F = Pf*C'*inv(R);
+
+%% System Simulation
+
+t = 30.0; %Simulation Time
+out = sim("project2_sim_p1.slx",t);
+
+%Followers Output
+y1 = get(out,"y1");
+y2 = get(out,"y2");
+y3 = get(out,"y3");
+y4 = get(out,"y4");
+y5 = get(out,"y5");
+y6 = get(out,"y6");
+
+%State 1 of each follower
+x11 = get(out,"x11");
+x21 = get(out,"x21");
+x31 = get(out,"x31");
+x41 = get(out,"x41");
+x51 = get(out,"x51");
+x61 = get(out,"x61");
+
+%State 2 of each follower
+x12 = get(out,"x12"); 
+x22 = get(out,"x22"); 
+x32 = get(out,"x32"); 
+x42 = get(out,"x42"); 
+x52 = get(out,"x52"); 
+x62 = get(out,"x62"); 
+
+%Leader Output
+y_leader = get(out,"y_leader");
+
+%State 1 of the leader
+x_leader_1 = get(out,"x_leader_1");
+
+%State 2 of the leader
+x_leader_2 = get(out,"x_leader_2");
+
+%Simulation Time
+T = get(out,"T");
+
+%% Plot
+
+%Plot outputs
+figure
+hold on
+plot(T,y1)
+plot(T,y2)
+plot(T,y3)
+plot(T,y4)
+plot(T,y5)
+plot(T,y6)
+plot(T,y_leader,"--")
+legend([ 
+    "$y_{1}$"
+    "$y_{2}$"
+    "$y_{3}$"
+    "$y_{4}$"
+    "$y_{5}$"
+    "$y_{6}$"
+    "$y_{l}$"
+],"Interpreter","latex")
+title("Output ($y$)","Interpreter","latex")
+xlabel("$t$","Interpreter","latex")
+hold off
+
+%Plot state 1
+figure
+hold on
+plot(T,x11)
+plot(T,x21)
+plot(T,x31)
+plot(T,x41)
+plot(T,x51)
+plot(T,x61)
+plot(T,x_leader_1,"--")
+legend([ 
+    "Follower 1 $x_{1}$"
+    "Follower 2 $x_{1}$"
+    "Follower 3 $x_{1}$"
+    "Follower 4 $x_{1}$"
+    "Follower 5 $x_{1}$"
+    "Follower 6 $x_{1}$"
+    "Leader $x_{1}$"
+],"Interpreter","latex")
+title("State 1 ($x_{1}$)","Interpreter","latex")
+xlabel("$t$","Interpreter","latex")
+hold off
+
+%Plot state 2
+figure
+hold on
+plot(T,x12)
+plot(T,x22)
+plot(T,x32)
+plot(T,x42)
+plot(T,x52)
+plot(T,x62)
+plot(T,x_leader_2,"--")
+legend([ 
+    "Follower 1 $x_{2}$"
+    "Follower 2 $x_{2}$"
+    "Follower 3 $x_{2}$"
+    "Follower 4 $x_{2}$"
+    "Follower 5 $x_{2}$"
+    "Follower 6 $x_{2}$"
+    "Leader $x_{2}$"
+],"Interpreter","latex")
+title("State 2 ($x_{2}$)","Interpreter","latex")
+xlabel("$t$","Interpreter","latex")
+hold off
+
+
+
+
