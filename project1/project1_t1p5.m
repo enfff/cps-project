@@ -79,31 +79,95 @@ for t=1:30
 
 end
 
+%% Plots
+% figure(1)
+% subplot(2,2,1);
+% plot(lambda,misses,"ko-");
+% xlabel("lambda");
+% ylabel("Number of misevaluations");
+% title("Number of misevaluations in function of lambda");
+% grid;
+% 
+% subplot(2,2,2)
+% plot(lambda,means,"ro-");
+% xlabel("lambda");
+% ylabel("Mean Convergence time");
+% title("Mean convergence time in function of lambda");
+% grid;
+% 
+% subplot(2,2,3)
+% plot(lambda,maxes,"bo-");
+% xlabel("lambda");
+% ylabel("Maximum Convergence time");
+% title("Maximum convergence time in function of lambda");
+% grid;
+% 
+% subplot(2,2,4)
+% plot(lambda,mins,"go-");
+% xlabel("lambda");
+% ylabel("Minimum Convergence time");
+% title("Minimum convergence time in function of lambda");
+% grid;
+
+theta_miss = [(lambda').^3 (lambda').^2 (lambda') (lambda').^0]\misses';
+theta_mean = [(lambda').^3 (lambda').^2 (lambda') (lambda').^0]\means';
+theta_max = [(lambda').^3 (lambda').^2 (lambda') (lambda').^0]\maxes';
+theta_min = [(lambda').^3 (lambda').^2 (lambda') (lambda').^0]\mins';
+
+est_miss = theta_miss(1)*lambda.^3 + theta_miss(2)*lambda.^2 + theta_miss(3)*lambda + theta_miss(4);
+est_mean = theta_mean(1)*lambda.^3 + theta_mean(2)*lambda.^2 + theta_mean(3)*lambda + theta_mean(4);
+est_max = theta_max(1)*lambda.^3 + theta_max(2)*lambda.^2 + theta_max(3)*lambda + theta_max(4);
+est_min = theta_min(1)*lambda.^3 + theta_min(2)*lambda.^2 + theta_min(3)*lambda + theta_min(4);
+
+%plots the number of misevaluations in function of lambda
+
 figure(1)
 subplot(2,2,1);
-plot(lambda,misses,"ko-");
-xlabel("lambda");
+hold on
+plot(lambda,misses,"k-");
+plot(lambda,est_miss,"r-","LineWidth",1);
+xlabel("$\lambda$","Interpreter","latex");
 ylabel("Number of misevaluations");
-title("Number of misevaluations in function of lambda");
+title("Number of misevaluations in function of $\lambda$","Interpreter","latex");
 grid;
+legend(["True Data","Trend"])
+hold off
+
+%plots the mean convergence time in function of lambda
 
 subplot(2,2,2)
-plot(lambda,means,"ro-");
-xlabel("lambda");
+hold on
+plot(lambda,means,"k-");
+plot(lambda,est_mean,"r-","LineWidth",1);
+xlabel("$\lambda$","Interpreter","latex");
 ylabel("Mean Convergence time");
-title("Mean convergence time in function of lambda");
+title("Mean convergence time in function of $\lambda$","Interpreter","latex");
 grid;
+legend(["True Data","Trend"])
+hold off
+
+%plots the max convergence time in function of lambda
 
 subplot(2,2,3)
-plot(lambda,maxes,"bo-");
-xlabel("lambda");
+hold on
+plot(lambda,maxes,"k-");
+plot(lambda,est_max,"r-","LineWidth",1);
+xlabel("$\lambda$","Interpreter","latex");
 ylabel("Maximum Convergence time");
-title("Maximum convergence time in function of lambda");
+title("Max convergence time in function of $\lambda$","Interpreter","latex");
 grid;
+legend(["True Data","Trend"])
+hold off
+
+%plots the min convergence time in function of q
 
 subplot(2,2,4)
-plot(lambda,mins,"go-");
-xlabel("lambda");
+hold on
+plot(lambda,mins,"k-");
+plot(lambda,est_min,"r-","LineWidth",1);
+xlabel("$\lambda$","Interpreter","latex");
 ylabel("Minimum Convergence time");
-title("Minimum convergence time in function of lambda");
+title("Min convergence time in function of $\lambda$","Interpreter","latex");
 grid;
+legend(["True Data","Trend"])
+hold off
