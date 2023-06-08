@@ -45,23 +45,23 @@ G = [
 ];
 
 % Luenberger Observer for the leader
-Lu_obs = (place(A', C', [-20, -10]))';
+Lu_obs_leader = (place(A', C', [-20, -10]))';
 
 % Regulator for the leader
-K_reg = place(A, B, [-5, -10]);
+K_reg = place(A, B, [-20, -10]);
+
+% Luenberger Observer for the followers
+Lu_obs_follower = (place(A', C', [-10, -8]))';
 
 % Coupling Gain
 L = D - Ad;
 eigs = eig(L+G);
-c = (0.5/min(real(eigs))) + 1.5;
+c = (0.5/min(real(eigs))) + 10;
 
 % Calculating K Gain
 Q = 5*eye(2);
 R =  1;
 P = are(A, B*pinv(R)*B', Q);
 K = inv(R)*B'*P;
-% chiedi ad enf perche la pseudo inversa
 
-% Calculating F
-Pf= are(A, C'*pinv(R)*C, Q);
-F = Pf*C'*inv(R);
+% Calcultta
