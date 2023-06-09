@@ -2,7 +2,7 @@ close all;
 clear all;
 clc;
 
-automatically_generate_plots = false;
+automatically_save_plots = false;
 % true -> automatically generates plots
 % false -> doesn't automatically generate plots
 
@@ -82,7 +82,7 @@ F = Pf*C'/R;
 %% System Simulation
 
 t = 30.0; %Simulation Time
-out = sim("project2_sim_p1.slx",t);
+out = sim("project2_sim_p1.slx", t);
 
 %Followers Output
 y1 = get(out,"y1");
@@ -124,7 +124,7 @@ T = get(out,"T");
 
 close all
 
-if automatically_generate_plots
+if automatically_save_plots
     % Create folder
     folder_name = create_folder(topology_num, Q, R);
 end
@@ -152,7 +152,7 @@ legend([
 title("Output ($y$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
 
-if automatically_generate_plots
+if automatically_save_plots
     saveas(gcf, folder_name+'\output.jpg');
 end
 
@@ -179,7 +179,7 @@ legend([
 ],"Interpreter","latex")
 title("State 1 ($x_{1}$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
-if automatically_generate_plots
+if automatically_save_plots
     saveas(gcf, folder_name+'\status1.jpg');
 end
 
@@ -207,11 +207,11 @@ legend([
 ],"Interpreter","latex")
 title("State 2 ($x_{2}$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
-if automatically_generate_plots
+if automatically_save_plots
     saveas(gcf, folder_name+'\status2.jpg');
 end
 hold off
 
-if automatically_generate_plots
+if automatically_save_plots
     fprintf('Created new files in %s\n', folder_name);
 end
