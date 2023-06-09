@@ -2,7 +2,7 @@ close all;
 clear all;
 clc;
 
-automatically_save_plots = false;
+automatically_save_plots = true;
 % true -> automatically generates plots
 % false -> doesn't automatically generate plots
 
@@ -69,7 +69,7 @@ eigs = eig(L+G);
 c = (0.5/min(real(eigs))) + 1.5;
 
 % Calculating K Gain
-Q = 10*eye(2);
+Q = 1*eye(2);
 R = 1;
 P = are(A, B*pinv(R)*B', Q);
 K = R\B'*P;
@@ -79,7 +79,7 @@ K = R\B'*P;
 Pf= are(A, C'*pinv(R)*C, Q);
 F = Pf*C'/R;
 
-%% System Simulation
+% System Simulation
 
 t = 30.0; %Simulation Time
 out = sim("project2_sim_p1.slx", t);
@@ -120,7 +120,7 @@ x_leader_2 = get(out,"x_leader_2");
 %Simulation Time
 T = get(out,"T");
 
-%% Plot
+% Plot
 
 close all
 
@@ -129,6 +129,8 @@ if automatically_save_plots
     folder_name = create_folder(topology_num, Q, R);
 end
 
+% String to append in the plot titles
+append_me = ", Q: " + num2str(Q(1:1)) + "I, R: " + num2str(R);
 
 %Plot outputs
 figure
@@ -149,7 +151,7 @@ legend([
     "$y_{6}$"
     "$y_{l}$"
 ],"Interpreter","latex")
-title("Output ($y$)","Interpreter","latex")
+title("Output ($y$)" + append_me,"Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
 
 if automatically_save_plots
@@ -159,7 +161,7 @@ end
 hold off
 
 %Plot state 1
-figure(1)
+figure
 hold on
 plot(T,x11)
 plot(T,x21)
@@ -177,7 +179,7 @@ legend([
     "Follower 6 $x_{1}$"
     "Leader $x_{1}$"
 ],"Interpreter","latex")
-title("State 1 ($x_{1}$)","Interpreter","latex")
+title("State 1 ($x_{1}$)" + append_me,"Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
 if automatically_save_plots
     saveas(gcf, folder_name+'\status1.jpg');
@@ -205,7 +207,7 @@ legend([
     "Follower 6 $x_{2}$"
     "Leader $x_{2}$"
 ],"Interpreter","latex")
-title("State 2 ($x_{2}$)","Interpreter","latex")
+title("State 2 ($x_{2}$)" + append_me,"Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
 if automatically_save_plots
     saveas(gcf, folder_name+'\status2.jpg');
