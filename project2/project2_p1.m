@@ -34,10 +34,10 @@ sigma_leader= 0.5;
 
 % Assegnamo un numero identificativo ad ogni topologia
 % CHANGE THIS 
-topology_num = 3;
+topology_num = 1;
 % Adjacency Matrix (read above)
 Ad = [
-    0 0 0 0 0 1;
+    0 0 0 0 0 0;
     1 0 0 0 0 0;
     0 1 0 0 0 0;
     0 0 1 0 0 0;
@@ -54,7 +54,8 @@ D = get_Degree_Matrix(Ad);
 %     zeros(4,6);
 %     0 0 0 0 0 1
 % ];
-G= eye(6);      % for topology 2 and 3
+% G= eye(6);      % for topology 2 and 3
+G = diag([1 0 0 0 0 0]); % for topology 1
 
 % Luenberger Observer for the leader
 Lu_obs = (place(A', C', [-20, -10]))';
@@ -68,7 +69,7 @@ eigs = eig(L+G);
 c = (0.5/min(real(eigs))) + 1.5;
 
 % Calculating K Gain
-Q = 0.001*eye(2);
+Q = 0.01*eye(2);
 R = 1;
 P = are(A, B*pinv(R)*B', Q);
 K = R\B'*P;
@@ -80,7 +81,7 @@ F = Pf*C'/R;
 
 % System Simulation
 
-t = 30.0; %Simulation Time
+t = 60.0; %Simulation Time
 out = sim("project2_sim_p1.slx", t);
 
 %Followers Output
