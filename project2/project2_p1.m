@@ -2,9 +2,11 @@ close all;
 clear all;
 clc;
 
-automatically_save_plots = true;
+automatically_save_plots = false;
 % true -> automatically generates plots
 % false -> doesn't automatically generate plots
+set_reference=3;
+% 1 -> constant     2 -> sinusoidal     3 -> ramp
 
 %% Setup
 
@@ -25,8 +27,8 @@ B = [
 C = [708.27 0];
 
 xhat0 = [0 0]';
-x0_followers = [1 0]';
-x0= x0_followers;
+x0_followers = [0 0]';
+
 
 %sensors noise
 sigma_followers= 0.5;
@@ -54,23 +56,38 @@ D = get_Degree_Matrix(Ad);
 %     zeros(4,6);
 %     0 0 0 0 0 1
 % ];
-% G= eye(6);      % for topology 2 and 3
-G = diag([1 0 0 0 0 0]); % for topology 1
+G= eye(6);      % for topology 2 and 3
+%G = diag([1 0 0 0 0 0]); % for topology 1
 
 % Luenberger Observer for the leader
 Lu_obs = (place(A', C', [-20, -10]))';
 
 % Regulator for the leader
-K_reg = place(A, B, [-5, -10]);
+K_reg=zeros(1,2);
+x0=0;
+switch set_reference
+    case 1
+        x0=[0 1.4119]';
+        K_reg = place(A, B, [0, -10]);
+        t = 3.0; %Simulation Time
+    case 2
+        x0= [1 1]';
+        K_reg= place(A,B,[i -i]);
+        t = 10.0; %Simulation Time
+    case 3
+        x0= [1 1]';
+        K_reg= acker(A,B, [0 0]);
+        t = 5.0; %Simulation Time
+end
 
 % Coupling Gain
 L = D - Ad;
 eigs = eig(L+G);
-c = (0.5/min(real(eigs))) + 1.5;
+c = (0.5/min(real(eigs))) ;
 
 % Calculating K Gain
-Q = 0.01*eye(2);
-R = 1;
+Q = 5*eye(2);
+R = 5;
 P = are(A, B*pinv(R)*B', Q);
 K = R\B'*P;
 % chiedi ad enf perche la pseudo inversa
@@ -81,7 +98,8 @@ F = Pf*C'/R;
 
 % System Simulation
 
-t = 60.0; %Simulation Time
+
+A=A-B*K_reg;
 out = sim("project2_sim_p1.slx", t);
 
 %Followers Output
