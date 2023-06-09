@@ -24,9 +24,13 @@ xhat0 = [0 0]';
 x0_followers = [1 0]';
 x0= x0_followers;
 
+%sensors noise
+sigma_followers= 0.5;
+sigma_leader= 0.5;
+
 %Adjagency Matrix
 Ad = [
-    0 0 0 0 0 0;
+    0 0 0 0 0 1;
     1 0 0 0 0 0;
     0 1 0 0 0 0;
     0 0 1 0 0 0;
@@ -38,11 +42,12 @@ Ad = [
 D = get_Degree_Matrix(Ad);
 
 %Pinning Matrix
-G = [
-    1 0 0 0 0 0;
-    zeros(4,6);
-    0 0 0 0 0 0
-];
+% G = [
+%     1 0 0 0 0 0;
+%     zeros(4,6);
+%     0 0 0 0 0 1
+% ];
+G= eye(6);      % for topology 2 and 3
 
 % Luenberger Observer for the leader
 Lu_obs = (place(A', C', [-20, -10]))';
@@ -57,7 +62,7 @@ c = (0.5/min(real(eigs))) + 1.5;
 
 % Calculating K Gain
 Q = 5*eye(2);
-R =  1;
+R = 5;
 P = are(A, B*pinv(R)*B', Q);
 K = R\B'*P;
 % chiedi ad enf perche la pseudo inversa
@@ -177,7 +182,4 @@ legend([
 title("State 2 ($x_{2}$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
 hold off
-
-
-
 
