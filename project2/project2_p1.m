@@ -28,7 +28,10 @@ x0= x0_followers;
 sigma_followers= 0.5;
 sigma_leader= 0.5;
 
-%Adjagency Matrix
+% Assegnamo un numero identificativo ad ogni topologia
+% CHANGE THIS 
+topology_num = 3;
+% Adjagency Matrix (read above)
 Ad = [
     0 0 0 0 0 1;
     1 0 0 0 0 0;
@@ -37,6 +40,7 @@ Ad = [
     0 0 0 1 0 0;
     0 0 0 0 1 0;
 ];
+
 
 %Degree Matrix
 D = get_Degree_Matrix(Ad);
@@ -61,8 +65,8 @@ eigs = eig(L+G);
 c = (0.5/min(real(eigs))) + 1.5;
 
 % Calculating K Gain
-Q = 5*eye(2);
-R = 5;
+Q = 10*eye(2);
+R = 1;
 P = are(A, B*pinv(R)*B', Q);
 K = R\B'*P;
 % chiedi ad enf perche la pseudo inversa
@@ -114,6 +118,11 @@ T = get(out,"T");
 
 %% Plot
 
+close all
+
+% Create folder
+folder_name = create_folder(topology_num, Q, R);
+
 %Plot outputs
 figure
 hold on
@@ -135,10 +144,13 @@ legend([
 ],"Interpreter","latex")
 title("Output ($y$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
+
+saveas(gcf, folder_name+'\output.jpg');
+
 hold off
 
 %Plot state 1
-figure
+figure(1)
 hold on
 plot(T,x11)
 plot(T,x21)
@@ -158,6 +170,7 @@ legend([
 ],"Interpreter","latex")
 title("State 1 ($x_{1}$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
+saveas(gcf, folder_name+'\status1.jpg');
 hold off
 
 %Plot state 2
@@ -174,6 +187,7 @@ legend([
     "Follower 1 $x_{2}$"
     "Follower 2 $x_{2}$"
     "Follower 3 $x_{2}$"
+    
     "Follower 4 $x_{2}$"
     "Follower 5 $x_{2}$"
     "Follower 6 $x_{2}$"
@@ -181,5 +195,7 @@ legend([
 ],"Interpreter","latex")
 title("State 2 ($x_{2}$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
+saveas(gcf, folder_name+'\status2.jpg');
 hold off
 
+fprintf('Created new files in %s\n', folder_name);
