@@ -35,7 +35,7 @@ Ad = [
 ];
 
 %Degree Matrix
-D = diag([0 1 1 1 1 1]);
+D = get_Degree_Matrix(Ad);
 
 %Pinning Matrix
 G = [
