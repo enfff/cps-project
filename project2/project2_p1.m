@@ -2,6 +2,10 @@ close all;
 clear all;
 clc;
 
+automatically_generate_plots = false;
+% true -> automatically generates plots
+% false -> doesn't automatically generate plots
+
 %% Setup
 
 %Number of follower nodes
@@ -120,8 +124,11 @@ T = get(out,"T");
 
 close all
 
-% Create folder
-folder_name = create_folder(topology_num, Q, R);
+if automatically_generate_plots
+    % Create folder
+    folder_name = create_folder(topology_num, Q, R);
+end
+
 
 %Plot outputs
 figure
@@ -145,7 +152,9 @@ legend([
 title("Output ($y$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
 
-saveas(gcf, folder_name+'\output.jpg');
+if automatically_generate_plots
+    saveas(gcf, folder_name+'\output.jpg');
+end
 
 hold off
 
@@ -170,7 +179,10 @@ legend([
 ],"Interpreter","latex")
 title("State 1 ($x_{1}$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
-saveas(gcf, folder_name+'\status1.jpg');
+if automatically_generate_plots
+    saveas(gcf, folder_name+'\status1.jpg');
+end
+
 hold off
 
 %Plot state 2
@@ -187,7 +199,7 @@ legend([
     "Follower 1 $x_{2}$"
     "Follower 2 $x_{2}$"
     "Follower 3 $x_{2}$"
-    
+
     "Follower 4 $x_{2}$"
     "Follower 5 $x_{2}$"
     "Follower 6 $x_{2}$"
@@ -195,7 +207,11 @@ legend([
 ],"Interpreter","latex")
 title("State 2 ($x_{2}$)","Interpreter","latex")
 xlabel("$t$","Interpreter","latex")
-saveas(gcf, folder_name+'\status2.jpg');
+if automatically_generate_plots
+    saveas(gcf, folder_name+'\status2.jpg');
+end
 hold off
 
-fprintf('Created new files in %s\n', folder_name);
+if automatically_generate_plots
+    fprintf('Created new files in %s\n', folder_name);
+end
