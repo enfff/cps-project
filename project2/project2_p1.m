@@ -5,7 +5,7 @@ clc;
 automatically_save_plots = false;
 % true -> automatically generates plots
 % false -> doesn't automatically generate plots
-set_reference=3;
+set_reference=2;
 % 1 -> constant     2 -> sinusoidal     3 -> ramp
 
 %% Setup
@@ -60,7 +60,7 @@ G= eye(6);      % for topology 2 and 3
 %G = diag([1 0 0 0 0 0]); % for topology 1
 
 % Luenberger Observer for the leader
-Lu_obs = (place(A', C', [-20, -10]))';
+ Lu_obs = (place(A', C', [-20, -10]))';
 
 % Regulator for the leader
 K_reg=zeros(1,2);
@@ -69,21 +69,23 @@ switch set_reference
     case 1
         x0=[0 1.4119]';
         K_reg = place(A, B, [0, -10]);
-        t = 3.0; %Simulation Time
+        
     case 2
         x0= [1 1]';
         K_reg= place(A,B,[i -i]);
-        t = 10.0; %Simulation Time
+        
     case 3
-        x0= [1 1]';
+        x0= [0 1]';
         K_reg= acker(A,B, [0 0]);
-        t = 5.0; %Simulation Time
+       
 end
+
+A=A-B*K_reg;
 
 % Coupling Gain
 L = D - Ad;
 eigs = eig(L+G);
-c = (0.5/min(real(eigs))) ;
+c = (0.5/min(real(eigs)))+ 0.5 ;
 
 % Calculating K Gain
 Q = 5*eye(2);
@@ -93,13 +95,16 @@ K = R\B'*P;
 % chiedi ad enf perche la pseudo inversa
 
 % Calculating F
-Pf= are(A, C'*pinv(R)*C, Q);
+if set_reference==3
+    Pf= are(A+B*K_reg, C'*pinv(R)*C, Q);
+else
+    Pf= are(A, C'*pinv(R)*C, Q);
+end
+
 F = Pf*C'/R;
 
 % System Simulation
-
-
-A=A-B*K_reg;
+t = 10.0; %Simulation Time
 out = sim("project2_sim_p1.slx", t);
 
 %Followers Output
