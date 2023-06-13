@@ -31,8 +31,8 @@ x0_followers = [0 0]';
 
 
 %sensors noise
-sigma_followers= 0.5;
-sigma_leader= 0.5;
+sigma_followers= 300;
+sigma_leader= 300;
 
 % Assegnamo un numero identificativo ad ogni topologia
 % CHANGE THIS 
@@ -95,12 +95,7 @@ K = R\B'*P;
 % chiedi ad enf perche la pseudo inversa
 
 % Calculating F
-if set_reference==3
-    Pf= are(A+B*K_reg, C'*pinv(R)*C, Q);
-else
-    Pf= are(A, C'*pinv(R)*C, Q);
-end
-
+Pf= are(A', C'*pinv(R)*C, Q);
 F = Pf*C'/R;
 
 % System Simulation

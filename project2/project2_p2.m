@@ -2,10 +2,10 @@ close all;
 clear all;
 clc;
 
-automatically_save_plots = false;
+automatically_save_plots = true;
 % true -> automatically generates plots
 % false -> doesn't automatically generate plots
-set_reference=3;
+set_reference=2;
 % 1 -> constant     2 -> sinusoidal     3 -> ramp
 
 %% Setup
@@ -81,22 +81,24 @@ end
 
 A= A-B*K_reg;
 
-% Luenberger Observer for the followers
-Lu_obs_follower = (place(A', C', [-10, -8]))';
-
 % Coupling Gain
 L = D - Ad;
 eigs = eig(L+G);
 c = (0.5/min(real(eigs))) + 0.5;
 
 % Calculating K Gain
-Q = 5*eye(2);
-R =  1;
+Q = 6*eye(2);
+R =  2;
 P = are(A, B*pinv(R)*B', Q);
 K = inv(R)*B'*P;
 
+
+% Calculating F
+F=[-1; -0.0001];        %values chosen after computing tf x/noise
+
+
 % System Simulation
-t = 10.0; %Simulation Time
+t = 30.0; %Simulation Time
 out = sim("project2_sim_p2.slx", t);
 
 %Followers Output
