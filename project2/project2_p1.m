@@ -15,7 +15,7 @@ QR_couples = [
     [100 1]
 ];
 
-% Assegnamo un numero identificativo ad ogni topologia
+% Assigning a topology 
 topology_num = 3; % Serve nella funzione set_topology
 
 [couples_number, ~] = size(QR_couples);
@@ -40,7 +40,7 @@ C = [708.27 0];
 
 for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
     fprintf("Working on topology #%d, ref: %s\n", topology_num, ref);
-    [D, Ad, G] = set_topology(topology_num);
+    [D, Ad, G, t] = set_topology(topology_num);
     
     % Initial conditions
     xhat0 = [0 0]';
@@ -53,7 +53,7 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
     % Luenberger Observer for the leader
     Lu_obs = (place(A', C', [-20, -10]))';
         
-    % Regulator for the leader
+    % Leader Regulator
     % Initializing variables
     K_reg=zeros(1,2);
     x0=zeros(2,1);
@@ -65,7 +65,7 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
             
         case "sinusoidal"
             x0= [1 1]';
-            K_reg= place(A,B,[i -i]);
+            K_reg= place(A,B,[1i -1i]);
             
         case "ramp"
             x0= [0 1]';
@@ -77,13 +77,12 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
     % Coupling Gain
     L = D - Ad;
     eigs = eig(L+G);
-    c = (0.5/min(real(eigs)))+ 0.5;
+    c = (0.5/min(real(eigs))) + 0.5;
 
     for couple_id=1:couples_number % iterates trough all Q, R couples
         % Calculating K Gain
         Q = QR_couples(couple_id, 1)*eye(2);
         R = QR_couples(couple_id, 2);
-        
         P = are(A, B*inv(R)*B', Q);
         K = R\B'*P;
         
@@ -92,7 +91,6 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         F = Pf*C'/R;
         
         % System Simulation
-        t = 10.0; %Simulation Time
         out = sim("project2_sim_p1.slx", t);
         
         %Followers Output
@@ -137,7 +135,7 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         
         if automatically_save_plots
             % Create folder
-            folder_name = create_folder(topology_num, ref, Q, R);
+            folder_name = create_folder(topology_num, ref, Q, R, "neighborhood_observer");
         end
         
         % String to append in the plot titles
@@ -198,9 +196,9 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         xlabel("$t$","Interpreter","latex")
         if automatically_save_plots
             if ispc
-                saveas(gcf, folder_name+'\status1.jpg');
+                saveas(gcf, folder_name+'\state1.jpg');
             else
-                saveas(gcf, folder_name+'/status1.jpg');
+                saveas(gcf, folder_name+'/state1.jpg');
             end
         end
         
@@ -220,7 +218,6 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
             "Follower 1 $x_{2}$"
             "Follower 2 $x_{2}$"
             "Follower 3 $x_{2}$"
-        
             "Follower 4 $x_{2}$"
             "Follower 5 $x_{2}$"
             "Follower 6 $x_{2}$"
@@ -230,9 +227,9 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         xlabel("$t$","Interpreter","latex")
         if automatically_save_plots
             if ispc
-                saveas(gcf, folder_name+'\status2.jpg');
+                saveas(gcf, folder_name+'\state2.jpg');
             else
-                saveas(gcf, folder_name+'/status2.jpg');
+                saveas(gcf, folder_name+'/state2.jpg');
             end
         end
         hold off
