@@ -166,7 +166,11 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         xlabel("$t$","Interpreter","latex")
         
         if automatically_save_plots
-            saveas(gcf, folder_name+'\output.jpg');
+            if ispc
+                saveas(gcf, folder_name+'\output.jpg');
+            else
+                saveas(gcf, folder_name+'/output.jpg');
+            end
         end
         
         hold off
@@ -193,7 +197,11 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         title("State 1 ($x_{1}$)" + append_me,"Interpreter","latex")
         xlabel("$t$","Interpreter","latex")
         if automatically_save_plots
-            saveas(gcf, folder_name+'\status1.jpg');
+            if ispc
+                saveas(gcf, folder_name+'\status1.jpg');
+            else
+                saveas(gcf, folder_name+'/status1.jpg');
+            end
         end
         
         hold off
@@ -221,7 +229,11 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         title("State 2 ($x_{2}$)" + append_me,"Interpreter","latex")
         xlabel("$t$","Interpreter","latex")
         if automatically_save_plots
-            saveas(gcf, folder_name+'\status2.jpg');
+            if ispc
+                saveas(gcf, folder_name+'\status2.jpg');
+            else
+                saveas(gcf, folder_name+'/status2.jpg');
+            end
         end
         hold off
         

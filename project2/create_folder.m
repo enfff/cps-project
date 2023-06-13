@@ -21,8 +21,15 @@
 
 function [path] = create_folder(topology_num, ref,Q, R)
     topology_name = 'topology_' + string(topology_num);
-    folder_name = 'Q' + string(Q(1,1)) + '_R' + string(R(1)) + '\' + ref;
-    mkdir(topology_name, folder_name)
-    path = topology_name + '\' + folder_name;
-    clear Qval topology_name folder_name topology_name
+    
+    if ispc % Genera path per windows
+        folder_name = 'Q' + string(Q(1,1)) + '_R' + string(R(1)) + '\' + ref;
+        mkdir(topology_name, folder_name)
+        path = topology_name + '\' + folder_name;        
+    else % Genera path per Linux/MacOS
+        folder_name = 'Q' + string(Q(1,1)) + '_R' + string(R(1)) + '/' + ref;
+        mkdir(topology_name, folder_name)
+        path = topology_name + '/' + folder_name; 
+    end 
+
 end
