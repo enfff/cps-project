@@ -8,6 +8,8 @@ automatically_save_plots = true;
 % false -> doesn't automatically generate plots
 
 QR_couples = [
+    [1 100]
+    [1 10]
     [1 1]
     [10 1]
     [100 1]
