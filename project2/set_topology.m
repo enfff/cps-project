@@ -30,15 +30,15 @@ switch topology_num
         ];
         G=diag([1 1 1 1 1 1]);
     case 3
-        Ad = [
-            0 0 0 0 0 0;
-            0 0 0 0 0 1;
-            1 0 0 0 0 0;
-            0 1 0 0 0 0;
-            0 0 0 1 0 0;
-            0 0 0 0 1 0
-        ];
-        G=diag([1 0 0 0 0 1]);
+         Ad = [
+               0 0 0 0 0 0;
+               0 0 0 0 0 0;
+               0 0 0 1 0 0;
+               0 1 0 0 1 0;
+               1 0 0 0 0 0;
+               1 0 0 0 0 0
+         ];
+         G=diag([1 1 1 0 0 0]);
     otherwise
         fprintf("This topology %d hasn't been implemented yet!\n", topology_num);
 end
