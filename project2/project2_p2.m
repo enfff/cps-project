@@ -16,7 +16,7 @@ QR_couples = [
 ];
 
 % Assigning a topology
-topology_num = 1; % Serve nella funzione set_topology
+topology_num = 3; % Serve nella funzione set_topology
 
 [couples_number, ~] = size(QR_couples);
 
