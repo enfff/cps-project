@@ -40,7 +40,7 @@ C = [708.27 0];
 
 for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
     fprintf("Working on topology #%d, ref: %s\n", topology_num, ref);
-    [D, Ad, G, t] = set_topology(topology_num);
+    [D, Ad, G] = set_topology(topology_num);
     
     % Initial conditions
     xhat0 = [0 0]';
@@ -90,6 +90,7 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         F=[-1; -0.0001];        %values chosen after computing tf x/noise
         
         % System Simulation
+        t = 200.0; %Simulation Time
         out = sim("project2_sim_p2.slx", t);
         
         %Followers Output
@@ -127,6 +128,36 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         
         %Simulation Time
         T = get(out,"T");
+
+        % Get follower settling time
+        % By settling time we intend the minimum time each follower
+        % takes to reach a difference of eps_sett from the leader
+        trans = 1.0; %Initial transifoty to avoid computation errors
+        eps_sett = 0.1;
+
+        % Settlinfg time for each node
+        y1_sett = abs(y1-y_leader)<eps_sett;
+        t1_sett = min(T(y1_sett & T>trans));
+
+        y2_sett = abs(y2-y_leader)<eps_sett;
+        t2_sett = min(T(y2_sett & T>trans));
+
+        y3_sett = abs(y3-y_leader)<eps_sett;
+        t3_sett = min(T(y3_sett & T>trans));
+
+        y4_sett = abs(y4-y_leader)<eps_sett;
+        t4_sett = min(T(y4_sett & T>trans));
+
+        y5_sett = abs(y5-y_leader)<eps_sett;
+        t5_sett = min(T(y5_sett & T>trans));
+
+        y6_sett = abs(y6-y_leader)<eps_sett;
+        t6_sett = min(T(y6_sett & T>trans));
+
+        % Settling time of the system, computed as the settling time of the
+        % slowest node
+
+        t_sett = max([t1_sett, t2_sett, t3_sett, t4_sett, t5_sett, t6_sett])
         
         % Plot
         
@@ -236,5 +267,6 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         if automatically_save_plots
             fprintf('Created new files in %s\n', folder_name);
         end
+        %pause
     end
 end
