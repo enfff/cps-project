@@ -3,7 +3,7 @@ clear all;
 clc;
 
 % Parameters
-automatically_save_plots = true;
+automatically_save_plots = false;
 % true -> automatically generates plots
 % false -> doesn't automatically generate plots
 
@@ -47,8 +47,11 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
     x0_followers = [0 0]';
     
     % Sensors noise
-    sigma_followers= 0.5;
-    sigma_leader= 0.5;
+%     sigma_followers= 0.5;
+%     sigma_leader= 0.5;
+    sigma_followers= 300;
+    sigma_leader= 300;
+       noise=30;
     
     % Luenberger Observer for the leader
     Lu_obs_leader = (place(A', C', [-20, -10]))';
@@ -87,10 +90,10 @@ for ref = ["constant", "sinusoidal", "ramp"] % iterates through all references
         K = R\B'*P;
         
         % Calculating F
-        F=[-1; -0.0001];        %values chosen after computing tf x/noise
-        
+        F=[-1; 0];        %values chosen after computing tf xhat/noise
+      
         % System Simulation
-        t = 200.0; %Simulation Time
+        t = 100.0; %Simulation Time
         out = sim("project2_sim_p2.slx", t);
         
         %Followers Output
