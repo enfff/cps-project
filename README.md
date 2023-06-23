@@ -1,8 +1,6 @@
-# cps-labs
- 
-Bla bla qualche giorno scriveremo qualcosa di simpatico
+# Modeling and Control of Cyber-Physical Systems
 
-# Reports - (View Only Links)
-[Project I](https://it.overleaf.com/read/kbfdxwjzfcpf)
-
-[Project II](https://it.overleaf.com/read/rkqbnvqjqjfw)
+Carena Simone, s309521
+Carmone Francesco Paolo, s308126
+Mazzucco Ludovica, s123456
+Pulinas Federico, s319881
